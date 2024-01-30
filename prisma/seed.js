@@ -1,7 +1,8 @@
-const { PrismaClient } = require('@prisma/client');
-const prisma = new PrismaClient();
-const bcrypt = require('bcrypt');
-const { faker } = require('@faker-js/faker');
+import { PrismaClient } from '@prisma/client'
+import bcrypt from 'bcrypt'
+import { faker } from '@faker-js/faker'
+
+const prisma = new PrismaClient()
 
 async function seed() {
   const users = []

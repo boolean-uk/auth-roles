@@ -1,6 +1,6 @@
-const prisma = require('../utils/prisma')
+import prisma from '../utils/prisma.js'
 
-const createPostDb = async (title, userId) => await prisma.post.create({
+const createPostDb = (title, userId) => prisma.post.create({
   data: {
     title,
     user: {
@@ -11,6 +11,6 @@ const createPostDb = async (title, userId) => await prisma.post.create({
   }
 })
 
-module.exports = {
+export {
   createPostDb
 }

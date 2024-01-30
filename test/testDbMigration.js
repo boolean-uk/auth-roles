@@ -1,6 +1,7 @@
-require('dotenv').config()
+import { config } from 'dotenv'
+config()
 
-const { exec } = require('node:child_process');
+import { exec } from 'node:child_process'
 
 try {
   // Connect to the user's test database instance

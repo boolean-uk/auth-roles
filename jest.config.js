@@ -1,3 +1,4 @@
-module.exports = {
-    setupFilesAfterEnv: ['./test/setupTests.js']
+export default {
+    setupFilesAfterEnv: ['./test/setupTests.js'],
+    transform: {}
 }

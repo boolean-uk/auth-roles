@@ -1,7 +1,7 @@
-const supertest = require("supertest")
-const app = require("../../../src/server.js")
-const { createUser } = require("../../helpers/createUser.js")
-const jwt = require('jsonwebtoken')
+import supertest from "supertest"
+import app from "../../../src/server.js"
+import { createUser } from "../../helpers/createUser.js"
+import jwt from 'jsonwebtoken'
 
 describe("User Endpoint", () => {
     describe("POST /users", () => {

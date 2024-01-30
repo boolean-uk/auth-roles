@@ -1,7 +1,7 @@
-// You don't need to touch this file, this is just exporting prisma so you can use it
-require('dotenv').config()
+import { config } from 'dotenv'
+config()
 
-const { PrismaClient } = require("@prisma/client");
+import { PrismaClient } from "@prisma/client"
 
 let logLevel = {
     log: ['query'],
@@ -14,6 +14,6 @@ if (process.env.NODE_ENV === 'test') {
     console.log(`Connected to DB instance: ${process.env['DATABASE_URL']}`)
 }
 
-const prisma = new PrismaClient(logLevel);
+const prisma = new PrismaClient(logLevel)
 
-module.exports = prisma;
+export default prisma

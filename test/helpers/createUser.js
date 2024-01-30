@@ -1,5 +1,5 @@
-const prisma = require("../../src/utils/prisma")
-const bcrypt = require('bcrypt');
+import prisma from "../../src/utils/prisma.js"
+import bcrypt from 'bcrypt'
 
 const createUser = async (username, password, role = 'USER') => {
   return await prisma.user.create({
@@ -11,6 +11,6 @@ const createUser = async (username, password, role = 'USER') => {
   })
 }
 
-module.exports = {
+export {
     createUser
 }

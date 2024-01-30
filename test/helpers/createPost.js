@@ -1,8 +1,7 @@
-const prisma = require("../../src/utils/prisma")
-const bcrypt = require('bcrypt');
+import prisma from "../../src/utils/prisma.js"
 
-const createPost = async (title, userId) => {
-  return await prisma.post.create({
+const createPost = (title, userId) => {
+  return prisma.post.create({
     data: {
       title,
       user: {
@@ -14,6 +13,6 @@ const createPost = async (title, userId) => {
   })
 }
 
-module.exports = {
+export {
     createPost
 }

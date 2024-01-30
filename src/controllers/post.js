@@ -1,5 +1,5 @@
-const { PrismaClientKnownRequestError } = require("@prisma/client")
-const { createPostDb } = require('../domains/post.js')
+import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library.js"
+import { createPostDb } from '../domains/post.js'
 
 const createPost = async (req, res) => {
   const {
@@ -28,6 +28,6 @@ const createPost = async (req, res) => {
   }
 }
 
-module.exports = {
+export {
   createPost
 }

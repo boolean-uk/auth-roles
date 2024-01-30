@@ -1,4 +1,4 @@
-const prisma = require("../src/utils/prisma")
+import prisma from "../src/utils/prisma.js"
 
 const deleteTables = () => {
   const deleteTables = [

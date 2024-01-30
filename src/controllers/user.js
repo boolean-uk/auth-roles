@@ -1,5 +1,5 @@
-const { PrismaClientKnownRequestError } = require("@prisma/client")
-const { createUserDb } = require('../domains/user.js')
+import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library.js"
+import { createUserDb } from '../domains/user.js'
 
 const createUser = async (req, res) => {
   const {
@@ -28,6 +28,6 @@ const createUser = async (req, res) => {
   }
 }
 
-module.exports = {
+export {
   createUser
 }

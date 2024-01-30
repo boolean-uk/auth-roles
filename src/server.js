@@ -1,20 +1,20 @@
-const express = require('express');
-const app = express();
+import express from 'express'
+import cors from 'cors'
+import morgan from 'morgan'
 
-const cors = require('cors');
-const morgan = require('morgan');
+import userRouter from './routers/user.js'
+import postRouter from './routers/post.js'
 
-app.disable('x-powered-by');
+const app = express()
 
-app.use(cors());
-app.use(morgan('dev'));
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.disable('x-powered-by')
 
-const userRouter = require('./routers/user');
-app.use('/users', userRouter);
+app.use(cors())
+app.use(morgan('dev'))
+app.use(express.json())
+app.use(express.urlencoded({ extended: true }))
 
-const postRouter = require('./routers/post');
-app.use('/posts', postRouter);
+app.use('/users', userRouter)
+app.use('/posts', postRouter)
 
-module.exports = app
+export default app
