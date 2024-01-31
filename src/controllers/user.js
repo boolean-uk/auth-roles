@@ -14,6 +14,12 @@ const createUser = async (req, res) => {
     })
   }
 
+  if (role !== 'ADMIN' && role !== 'USER') {
+    return res.status(400).json({ 
+      error: "Valid roles are 'USER' or 'ADMIN'"
+    })
+  }
+
   try {
     const createdUser = await createUserDb(username, password, role)
     return res.status(201).json({ user: createdUser })
