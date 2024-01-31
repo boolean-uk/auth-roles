@@ -34,6 +34,11 @@ const createUser = async (req, res) => {
   }
 }
 
+const getUsers = async (req, res) => {
+  const users = await getUsersDb
+}
+
 module.exports = {
-  createUser
+  createUser,
+  getUsers
 }
