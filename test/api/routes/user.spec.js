@@ -47,7 +47,7 @@ describe("User Endpoint", () => {
     })
 
     describe("GET /users", () => {
-        it("should let admins get a list of users", async () => {
+        fit("should let admins get a list of users", async () => {
             const admin = await createUser('admin', '123456', 'ADMIN') // create an admin user
             const token = jwt.sign({ sub: admin.id }, process.env.JWT_SECRET)
 
@@ -58,7 +58,7 @@ describe("User Endpoint", () => {
 
             const response = await supertest(app)
                 .get("/users")
-                .auth(token)
+                .auth(token,{type: "bearer"})
                 .send()
 
             expect(response.status).toEqual(200)
@@ -77,7 +77,7 @@ describe("User Endpoint", () => {
 
             const response = await supertest(app)
                 .get("/users")
-                .auth(token)
+                .auth(token,{type: "bearer"})
                 .send()
 
             expect(response.status).toEqual(403)
@@ -94,7 +94,7 @@ describe("User Endpoint", () => {
 
             const response = await supertest(app)
                 .delete(`/users/${user.id}`)
-                .auth(token)
+                .auth(token,{type: "bearer"})
                 .send()
 
             expect(response.status).toEqual(200)
@@ -124,7 +124,7 @@ describe("User Endpoint", () => {
 
             const response = await supertest(app)
                 .delete(`/users/${user.id}`)
-                .auth(token)
+                .auth(token,{type: "bearer"})
                 .send()
 
             expect(response.status).toEqual(200)
