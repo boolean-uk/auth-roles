@@ -12,11 +12,18 @@ const verifyToken = (req, res, next) => {
     const splitToken = token.slice(7)
 
     try {
-        jwt.verify(splitToken, secret)
+        const verifiedToken = jwt.verify(splitToken, secret)
+        req.token = verifiedToken
         next()
     } catch (err) {
         return res.status(400).json({ error: "Invalid credentials" })
     }
 }
 
-module.exports = { verifyToken }
+const verifyAdmin = async (req, res, next) => {
+    const userID = req.token.sub
+
+    const findUser = await findUserDb()
+}
+
+module.exports = { verifyToken, verifyAdmin }
