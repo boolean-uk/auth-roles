@@ -1,22 +1,17 @@
 const { PrismaClientKnownRequestError } = require('@prisma/client')
 
 // DB
-const { getAllUsersDb, createUserDb } = require('../domains/user.js')
-
-// Error Handlers
-const { checkAdminUser } = require('../errors/userErrorHandler.js')
+const {
+  getAllUsersDb,
+  createUserDb,
+  deleteUserDb
+} = require('../domains/user.js')
 
 // Helpers
-const { verifyUser } = require('../helpers/userHelpers.js')
+const { getUserById } = require('../helpers/userHelpers.js')
 
 const getAllUsers = async (req, res) => {
-  const { authorization } = req.headers
-
   try {
-    const verifiedUser = await verifyUser(authorization)
-
-    checkAdminUser(verifiedUser.role)
-
     const usersList = await getAllUsersDb()
 
     res.status(200).json({ users: usersList })
@@ -47,11 +42,26 @@ const createUser = async (req, res) => {
       }
     }
 
-    res.status(500).json({ error: e.message })
+    res.status(error.status ?? 500).json({ error: error.message })
+  }
+}
+
+const deleteUser = async (req, res) => {
+  const { userId } = req.params
+
+  try {
+    const foundUser = await getUserById(userId)
+
+    const deletedUser = await deleteUserDb(foundUser.id)
+
+    res.status(200).json({ user: deletedUser })
+  } catch (error) {
+    res.status(error.status ?? 500).json({ error: error.message })
   }
 }
 
 module.exports = {
   getAllUsers,
-  createUser
+  createUser,
+  deleteUser
 }
