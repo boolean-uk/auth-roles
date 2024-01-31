@@ -20,6 +20,8 @@ model User {
   updatedAt    DateTime @updatedAt
 
   posts Post[]
+
+  roles UserToRole[]
 }
 
 model Post {
@@ -30,4 +32,71 @@ model Post {
 
   userId Int
   user   User @relation(fields: [userId], references: [id])
+}
+
+model UserToRole {
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  userId Int
+  user   User @relation(fields: [userId], references: [id])
+  roleId Int
+  role   Role @relation(fields: [roleId], references: [id])
+
+  @@id([userId, roleId])
+}
+
+model Role {
+  id        Int      @id @default(autoincrement())
+  type      RoleType @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  users       UserToRole[]
+  permissions RoleToPermission[]
+}
+
+model RoleToPermission {
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  roleId       Int
+  role         Role       @relation(fields: [roleId], references: [id])
+  permissionId Int
+  permission   Permission @relation(fields: [permissionId], references: [id])
+
+  @@id([roleId, permissionId])
+}
+
+model Permission {
+  id        Int       @id @default(autoincrement())
+  operation Operation
+  target    Target
+  resource  Resource
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  role RoleToPermission[]
+}
+
+enum RoleType {
+  ADMIN
+  USER
+}
+
+enum Operation {
+  CREATE
+  READ
+  UPDATE
+  DELETE
+}
+
+enum Target {
+  ANY
+  OWN
+}
+
+enum Resource {
+  POST
+  USER
 }
