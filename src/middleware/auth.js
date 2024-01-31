@@ -14,28 +14,27 @@ const verifyToken = async (req, res, next) => {
     try {
         const verifiedToken = jwt.verify(token, secret)
         req.token = verifiedToken
-        const userID = verifiedToken.sub
-        const foundUser = await findUserDb(userID)
-        delete foundUser.passwordHash
-        req.user = foundUser
-
         next()
     } catch (err) {
         return res.status(400).json({ error: "Invalid or expired token" })
     }
 }
 
-const verifyAdmin = (req, res, next) => {
-    if (!req.user) {
-        return res.status(401).json({ message: 'Unauthorised' })
+const verifyAdmin = async (req, res, next) => {
+    const userID = req.token.sub
+    const foundUser = await findUserDb(userID)
+
+    if (!foundUser) {
+        return res.status(401).json({ message: 'Unauthorised user' })
     }
 
-    if (req.user.role !== 'ADMIN') {
+    if (foundUser.role !== 'ADMIN') {
         return res.status(403).json({
-            error: "You do not have permission to view all users."
+            error: "You do not have sufficient permission."
         })
     }
 
+    delete foundUser.passwordHash
     next()
 }
 
