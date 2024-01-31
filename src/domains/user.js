@@ -35,6 +35,23 @@ const createUserDb = async (username, password) => {
   });
 }
 
+const selectAllUsersDb = async() => {
+  return await prisma.user.findMany({
+    include: {
+      roles: {
+        include: {
+          role: {
+            select: {
+              type: true
+            }
+          }
+        }
+      }
+    }
+  })
+}
+
 module.exports = {
-  createUserDb
+  createUserDb,
+  selectAllUsersDb
 }
