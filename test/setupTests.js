@@ -2,6 +2,8 @@ const prisma = require("../src/utils/prisma")
 
 const deleteTables = () => {
   const deleteTables = [
+    prisma.userToRole.deleteMany(),
+    prisma.roleToPermission.deleteMany(),
     prisma.post.deleteMany(),
     prisma.user.deleteMany()
   ];
