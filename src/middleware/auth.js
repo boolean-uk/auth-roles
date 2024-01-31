@@ -21,12 +21,14 @@ const verifyToken = async (req, res, next) => {
 }
 
 const verifyAdmin = (req, res, next) => {
+  const { userId } = req.params
+
   try {
     if (!req.user) {
       throw errorCreator('Unauthorized', 401)
     }
 
-    if (req.user.role !== 'ADMIN') {
+    if (req.user.role !== 'ADMIN' && Number(req.user.id) !== Number(userId)) {
       throw errorCreator('Forbidden', 403)
     }
 
