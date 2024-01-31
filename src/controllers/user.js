@@ -4,7 +4,8 @@ const { createUserDb } = require('../domains/user.js')
 const createUser = async (req, res) => {
   const {
     username,
-    password
+    password,
+    role = 'USER'
   } = req.body
 
   if (!username || !password) {
@@ -14,8 +15,7 @@ const createUser = async (req, res) => {
   }
 
   try {
-    const createdUser = await createUserDb(username, password)
-    console.log(createdUser)
+    const createdUser = await createUserDb(username, password, role)
     return res.status(201).json({ user: createdUser })
   } catch (e) {
     if (e instanceof PrismaClientKnownRequestError) {
