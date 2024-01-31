@@ -59,7 +59,7 @@ describe("User Endpoint", () => {
 
             const response = await supertest(app)
                 .get("/users")
-                .auth(token, {type: "bearer"})
+                .auth(token, {type: 'bearer'})
                 .send()
 
             expect(response.status).toEqual(200)
@@ -78,7 +78,7 @@ describe("User Endpoint", () => {
 
             const response = await supertest(app)
                 .get("/users")
-                .auth(token, {type: "bearer"})
+                .auth(token, {type: 'bearer'})
                 .send()
 
             expect(response.status).toEqual(403)
@@ -95,7 +95,7 @@ describe("User Endpoint", () => {
 
             const response = await supertest(app)
                 .delete(`/users/${user.id}`)
-                .auth(token)
+                .auth(token, {type: 'bearer'})
                 .send()
 
             expect(response.status).toEqual(200)
@@ -112,7 +112,7 @@ describe("User Endpoint", () => {
 
             const response = await supertest(app)
                 .delete(`/users/${userToDelete.id}`)
-                .auth(token, {type: "bearer"})
+                .auth(token, {type: 'bearer'})
                 .send()
 
             expect(response.status).toEqual(403)
@@ -125,7 +125,7 @@ describe("User Endpoint", () => {
 
             const response = await supertest(app)
                 .delete(`/users/${user.id}`)
-                .auth(token, {type: "bearer"})
+                .auth(token, {type: 'bearer'})
                 .send()
 
             expect(response.status).toEqual(200)
