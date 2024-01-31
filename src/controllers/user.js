@@ -1,27 +1,21 @@
 const { PrismaClientKnownRequestError } = require('@prisma/client')
-const jwt = require('jsonwebtoken')
 
 // DB
-const {
-  getAllUsersDb,
-  getUserBySubDb,
-  createUserDb
-} = require('../domains/user.js')
+const { getAllUsersDb, createUserDb } = require('../domains/user.js')
 
 // Error Handlers
 const { checkAdminUser } = require('../errors/userErrorHandler.js')
 
-const secret = process.env.JWT_SECRET
+// Helpers
+const { verifyUser } = require('../helpers/userHelpers.js')
 
 const getAllUsers = async (req, res) => {
   const { authorization } = req.headers
 
   try {
-    const authUser = jwt.verify(authorization.split(' ')[1], secret)
-    const foundUser = await getUserBySubDb(authUser.sub)
+    const verifiedUser = await verifyUser(authorization)
 
-    // Error handlers
-    checkAdminUser(foundUser.role)
+    checkAdminUser(verifiedUser.role)
 
     const usersList = await getAllUsersDb()
 
