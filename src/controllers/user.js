@@ -36,8 +36,7 @@ const createUser = async (req, res) => {
 
 const getUsers = async (req, res) => {
   const users = await getUsersDb()
-  // console.log(users)
-  res.json({ users })
+  res.status(200).json({ users })
 }
 
 module.exports = {
