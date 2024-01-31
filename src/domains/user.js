@@ -51,7 +51,25 @@ const selectAllUsersDb = async() => {
   })
 }
 
+const selectAdminByIdDb = async(id) => {
+  return await prisma.user.findUniqueOrThrow({
+    where: {
+      id,
+      AND: {
+        roles: {
+          some: {
+            role: {
+              type: "ADMIN"
+            }
+          }
+        }
+      }
+    }
+  })
+}
+
 module.exports = {
   createUserDb,
+  selectAdminByIdDb,
   selectAllUsersDb
 }
