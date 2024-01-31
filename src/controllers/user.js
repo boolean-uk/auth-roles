@@ -1,5 +1,7 @@
 const { PrismaClientKnownRequestError } = require("@prisma/client")
 const { createUserDb, getUsersDb } = require('../domains/user.js')
+const jwt = require('jsonwebtoken')
+const secret = process.env.JWT_SECRET
 
 const createUser = async (req, res) => {
   const {
@@ -22,7 +24,8 @@ const createUser = async (req, res) => {
 
   try {
     const createdUser = await createUserDb(username, password, role)
-    return res.status(201).json({ user: createdUser })
+    const token = jwt.sign({ sub: createdUser.id }, secret)
+    return res.status(201).json({ user: createdUser, token })
   } catch (e) {
     if (e instanceof PrismaClientKnownRequestError) {
       if (e.code === "P2002") {
