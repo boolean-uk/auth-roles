@@ -1,10 +1,13 @@
 const express = require("express");
 const {
-  createPost
+  createPost, deletePost
 } = require('../controllers/post');
+
+const {verifyToken, verifyUserOwnsPostOrAdmin} = require('../middleware/auth.js')
 
 const router = express.Router();
 
-router.post("/", createPost);
+router.post("/", verifyToken, createPost);
+router.delete("/:id", verifyToken, verifyUserOwnsPostOrAdmin, deletePost )
 
 module.exports = router;
