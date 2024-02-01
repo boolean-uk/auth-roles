@@ -38,7 +38,6 @@ jobs:
       TEST_DATABASE_URL: postgresql://postgres:postgres@localhost:5432/test?schema=prisma
       JWT_SECRET: ${{ secrets.JWT_SECRET }}
     steps:
-<<<<<<< HEAD
       - uses: actions/checkout@v4
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v3
@@ -50,16 +49,3 @@ jobs:
       - run: npx jest --bail -i test/api/routes
         env:
           JWT_SECRET: ${{ secrets.JWT_SECRET }}
-=======
-    - uses: actions/checkout@v4
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v3
-      with:
-        node-version: ${{ matrix.node-version }}
-        cache: 'npm'
-    - run: npm ci
-    - run: npm run test:migration
-    - run: npx jest --bail -i test/api/routes
-      env:
-        JWT_SECRET: ${{ secrets.JWT_SECRET }}
->>>>>>> 1a3dea587c4a1fe97750fab46f494185a0d3f26f
