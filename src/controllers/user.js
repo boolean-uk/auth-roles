@@ -33,17 +33,18 @@ const getUsers = async (req, res) => {
 
 const deleteUser = async (req, res) => {
   const userId = Number(req.params.userId)
-  console.log(userId)
   const userExists = await findUserDb(userId)
   
   if (!userExists) {
     return res.status(400).json({ error: "User does not exist" })
   }
 
-  const deletedUser = await deleteUserDb(userId)
+  await deleteUserDb(userId)
 
   res.status(200).json({ 
-    message: "User has been successfully deleted"
+    user: userExists,
+    id: userId,
+    username: userExists.username
   })
 }
 
