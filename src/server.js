@@ -1,5 +1,6 @@
 const express = require('express');
 const app = express();
+const { PrismaClientKnownRequestError } = require("@prisma/client")
 
 const cors = require('cors');
 const morgan = require('morgan');
