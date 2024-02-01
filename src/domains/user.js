@@ -115,12 +115,12 @@ const selectUserByPostId = async (postId) => {
     where: {
       posts: {
         some: {
-          id: postId
-        }
-      }
-    }
-  })
-}
+          id: postId,
+        },
+      },
+    },
+  });
+};
 
 module.exports = {
   createUserDb,
