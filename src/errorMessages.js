@@ -4,3 +4,5 @@ const errorMessages = {
     insufficientPermissons: "You do not have sufficient permission.",
     noPost: "Post does not exist"
 }
+
+module.exports = errorMessages
