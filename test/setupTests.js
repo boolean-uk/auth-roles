@@ -68,6 +68,14 @@ global.beforeAll(() => {
   return generatePermissions("USER", "OWN", "USER");
 });
 
+global.beforeAll(() => {
+  return generatePermissions("ADMIN", "ANY", "POST");
+});
+
+global.beforeAll(() => {
+  return generatePermissions("USER", "OWN", "POST");
+});
+
 global.afterEach(() => {
   return deleteTablesEach();
 });
