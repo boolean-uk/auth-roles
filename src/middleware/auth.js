@@ -1,5 +1,4 @@
 const jwt = require("jsonwebtoken");
-const users = require("../data/users.js");
 
 const verifyToken = (req, res, next) => {
     const header = req.header("authorization");
@@ -9,8 +8,7 @@ const verifyToken = (req, res, next) => {
     }
 
     const [_, token] = header.split(" ");
-
-    try {
+   
         const verifiedToken = jwt.verify(token, "secret");
 
         const foundUser = users.find(
@@ -25,9 +23,6 @@ const verifyToken = (req, res, next) => {
         req.user = foundUser;
 
         next();
-    } catch (err) {
-        return res.status(400).json({ message: "Invalid credentials" });
-    }
 };
 
 const verifyAdminRole = (req, res, next) => {
