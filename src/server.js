@@ -19,7 +19,7 @@ const postRouter = require('./routers/post');
 app.use('/posts', postRouter);
 
 app.use((err, req, res, next)=> {
-    console.log(err)
+    console.log("ERROR CONSOLE LOG", err)
 
     res.status(500).json({message: "Internal error"})
 })
