@@ -1,4 +1,4 @@
-const { createUserDb, getUsersDb } = require("../domains/user.js");
+const { createUserDb, getUsersDb, deleteUserDb } = require("../domains/user.js");
 const jwt = require("jsonwebtoken");
 const secret = process.env.JWT_SECRET
 
@@ -23,7 +23,15 @@ const getUsers = async (req, res) => {
     return res.status(200).json({users: foundUsers})
 }
 
+const deleteUser = async (req, res) => {
+    const id  = Number(req.params.id)
+    const deletedUser = await deleteUserDb(id)
+    return res.status(200).json({user: deletedUser})
+}
+
+
 module.exports = {
     createUser,
-    getUsers
+    getUsers,
+    deleteUser
 };
