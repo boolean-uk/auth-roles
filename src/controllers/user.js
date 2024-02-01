@@ -9,24 +9,10 @@ const createUser = async (req, res) => {
             error: "Missing fields in request body",
         });
     }
-
-    try {
         const createdUser = await createUserDb(username, password);
 
         return res.status(201).json({ user: createdUser });
-    } catch (e) {
-        if (e instanceof PrismaClientKnownRequestError) {
-            if (e.code === "P2002") {
-                return res
-                    .status(409)
-                    .json({
-                        error: "A user with the provided username already exists",
-                    });
-            }
-        }
-
-        res.status(500).json({ error: e.message });
-    }
+    
 };
 
 const getUsers = async (req, res) => {
