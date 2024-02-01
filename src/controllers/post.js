@@ -1,4 +1,4 @@
-const { createPostDb } = require('../domains/post.js')
+const { createPostDb, deletePostsDb } = require('../domains/post.js')
 
 const createPost = async (req, res) => {
   const {
@@ -18,7 +18,7 @@ const createPost = async (req, res) => {
 }
 
 const deletePosts = async (req, res) => {
-  const postId = req.params.postId
+  const postId = Number(req.params.postId)
 
   const postToDelete = await deletePostsDb(postId)
 
