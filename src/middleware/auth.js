@@ -33,5 +33,5 @@ const adminAuthorize = async (req, res, next) => {
 
 module.exports = {
   adminAuthorize,
-  authenticate
+  authenticate,
 };

@@ -1,5 +1,5 @@
-const prisma = require('../utils/prisma')
-const bcrypt = require('bcrypt')
+const prisma = require("../utils/prisma");
+const bcrypt = require("bcrypt");
 
 const createUserDb = async (username, password) => {
   return await prisma.user.create({
@@ -11,47 +11,47 @@ const createUserDb = async (username, password) => {
           role: {
             connectOrCreate: {
               create: {
-                type: "USER"
+                type: "USER",
               },
               where: {
-                type: "USER" 
-              }
-            }
-          }
-        }
-      }
+                type: "USER",
+              },
+            },
+          },
+        },
+      },
     },
     include: {
       roles: {
         include: {
           role: {
             select: {
-              type: true
-            }
-          }
-        }
-      }
-    }
+              type: true,
+            },
+          },
+        },
+      },
+    },
   });
-}
+};
 
-const selectAllUsersDb = async() => {
+const selectAllUsersDb = async () => {
   return await prisma.user.findMany({
     include: {
       roles: {
         include: {
           role: {
             select: {
-              type: true
-            }
-          }
-        }
-      }
-    }
-  })
-}
+              type: true,
+            },
+          },
+        },
+      },
+    },
+  });
+};
 
-const selectAdminByIdDb = async(id) => {
+const selectAdminByIdDb = async (id) => {
   return await prisma.user.findUniqueOrThrow({
     where: {
       id,
@@ -59,17 +59,17 @@ const selectAdminByIdDb = async(id) => {
         roles: {
           some: {
             role: {
-              type: "ADMIN"
-            }
-          }
-        }
-      }
-    }
-  })
-}
+              type: "ADMIN",
+            },
+          },
+        },
+      },
+    },
+  });
+};
 
 module.exports = {
   createUserDb,
   selectAdminByIdDb,
-  selectAllUsersDb
-}
+  selectAllUsersDb,
+};
