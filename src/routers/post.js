@@ -1,10 +1,6 @@
 const express = require("express");
-const {
-  createPost,
-  deletePosts
-} = require('../controllers/post');
+const { createPost, deletePosts } = require('../controllers/post');
 const { verifyToken, verifyPostDeletePermissions } = require("../middleware/auth");
-
 const router = express.Router();
 
 router.post("/", createPost);

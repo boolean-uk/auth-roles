@@ -4,22 +4,14 @@ const secret = process.env.JWT_SECRET
 const messages = require('../errorMessages.js')
 
 const createUser = async (req, res) => {
-  const {
-    username,
-    password,
-    role = 'USER'
-  } = req.body
+  const { username, password, role = 'USER' } = req.body
 
   if (!username || !password) {
-    return res.status(400).json({
-      error: messages.missingFields
-    })
+    return res.status(400).json({ error: messages.missingFields })
   }
 
   if (role !== 'ADMIN' && role !== 'USER') {
-    return res.status(400).json({ 
-      error: messages.validRoles
-    })
+    return res.status(400).json({ error: messages.validRoles })
   }
 
     const createdUser = await createUserDb(username, password, role)
@@ -41,16 +33,7 @@ const deleteUser = async (req, res) => {
   }
 
   await deleteUserDb(userId)
-
-  res.status(200).json({ 
-    user: userExists,
-    id: userId,
-    username: userExists.username
-  })
+  res.status(200).json({ user: userExists, id: userId, username: userExists.username })
 }
 
-module.exports = {
-  createUser,
-  getUsers,
-  deleteUser
-}
+module.exports = { createUser, getUsers, deleteUser }

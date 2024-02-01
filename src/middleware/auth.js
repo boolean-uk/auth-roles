@@ -8,9 +8,7 @@ const verifyToken = async (req, res, next) => {
     const token = req.headers.authorization.slice(7)
 
     if (!token) {
-        return res.status(400).json({
-            error: messages.missingToken
-        })
+        return res.status(400).json({ error: messages.missingToken })
     }
 
     const verifiedToken = jwt.verify(token, secret)
@@ -27,9 +25,7 @@ const verifyAdmin = async (req, res, next) => {
     }
 
     if (foundUser.role !== 'ADMIN') {
-        return res.status(403).json({
-            error: messages.insufficientPermissons
-        })
+        return res.status(403).json({ error: messages.insufficientPermissons })
     }
 
     next()
@@ -45,9 +41,7 @@ const verifyDeletePermissions = async (req, res, next) => {
     }
 
     if (currentUser.role !== 'ADMIN' && currentUser.id !== userToDeleteID) {
-        return res.status(403).json({
-            error: messages.insufficientPermissons
-        })
+        return res.status(403).json({ error: messages.insufficientPermissons })
     }
 
     next()
@@ -69,9 +63,7 @@ const verifyPostDeletePermissions = async (req, res, next) => {
     }
 
     if (currentUser.role !== 'ADMIN' && currentUser.id !== postToDelete.userId) {
-        return res.status(403).json({
-            error: messages.insufficientPermissons
-        })
+        return res.status(403).json({ error: messages.insufficientPermissons })
     }
 
     next()

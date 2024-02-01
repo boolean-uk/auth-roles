@@ -4,27 +4,17 @@ const createPostDb = async (title, userId) => await prisma.post.create({
   data: {
     title,
     user: {
-      connect: {
-        id: userId
-      }
+      connect: { id: userId }
     }
   }
 })
 
 const findPostDb = async (id) => await prisma.post.findUnique({
-  where: {
-    id
-  }
+  where: { id }
 })
 
 const deletePostsDb = async (id) => await prisma.post.delete({
-  where: {
-    id
-  }
+  where: { id }
 })
 
-module.exports = {
-  createPostDb,
-  findPostDb,
-  deletePostsDb
-}
+module.exports = { createPostDb, findPostDb, deletePostsDb }
