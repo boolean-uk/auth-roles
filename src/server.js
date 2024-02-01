@@ -1,6 +1,9 @@
 const express = require("express");
 require("express-async-errors");
+
 const app = express();
+
+const { PrismaClientKnownRequestError } = require("@prisma/client");
 
 const cors = require("cors");
 const morgan = require("morgan");
@@ -19,15 +22,16 @@ const postRouter = require("./routers/post");
 app.use("/posts", postRouter);
 
 app.use((err, req, res, next) => {
-    console.log("ERROR CONSOLE LOG", err);
+    console.log("ERROR CONSOLE LOG (APP LEVEL)", err);
     if (err instanceof PrismaClientKnownRequestError) {
         if (err.code === "P2002") {
             return res.status(409).json({
                 error: "A user with the provided username already exists",
             });
         }
-        res.status(500).json({ message: "Internal error" });
+        ;
     }
+    return res.status(500).json({ message: "Internal error" })
 });
 
 module.exports = app;
