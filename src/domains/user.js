@@ -35,6 +35,27 @@ const createUserDb = async (username, password) => {
   });
 };
 
+const deleteUserDb = async (id) => {
+  const deletions = [
+    prisma.userToRole.deleteMany({
+      where: {
+        userId: id,
+      },
+    }),
+    prisma.user.delete({
+      where: {
+        id,
+      },
+      select: {
+        id: true,
+        username: true
+      }
+    }),
+  ];
+
+  return prisma.$transaction(deletions)
+};
+
 const selectAllUsersDb = async () => {
   return await prisma.user.findMany({
     include: {
@@ -91,6 +112,7 @@ const selectUserPermission = async (userId, operation, resource, target) => {
 
 module.exports = {
   createUserDb,
+  deleteUserDb,
   selectAdminByIdDb,
   selectAllUsersDb,
   selectUserPermission,
