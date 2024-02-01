@@ -25,8 +25,10 @@
   "homepage": "https://github.com/boolean-uk/auth-roles#readme",
   "devDependencies": {
     "@faker-js/faker": "^8.4.0",
+    "@types/jest": "^29.5.11",
     "jest": "^29.7.0",
     "nodemon": "^3.0.2",
+    "prettier": "^3.2.4",
     "prisma": "^5.7.1",
     "supertest": "^6.3.3"
   },
