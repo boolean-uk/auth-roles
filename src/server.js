@@ -29,6 +29,13 @@ app.use((err, req, res, next) => {
                 error: "A user with the provided username already exists",
             });
         }
+        if (err.code === "P2025") {
+            return res
+                .status(409)
+                .json({
+                    error: "A user with the provided ID does not exist",
+                });
+        }
         ;
     }
     return res.status(500).json({ message: "Internal error" })
