@@ -12,6 +12,18 @@ const createPostDb = async (title, userId) =>
     },
   });
 
+const deletePostDb = async (id) => {
+  return await prisma.post.delete({
+    where: {
+      id,
+    },
+    select: {
+      title: true,
+    },
+  });
+};
+
 module.exports = {
   createPostDb,
+  deletePostDb,
 };
