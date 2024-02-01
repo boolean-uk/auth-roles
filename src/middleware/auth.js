@@ -1,5 +1,9 @@
 const jwt = require("jsonwebtoken");
-const { selectAdminByIdDb, selectUserPermission } = require("../domains/user");
+const {
+  selectAdminByIdDb,
+  selectUserPermission,
+  selectUserByPostId,
+} = require("../domains/user");
 const secret = process.env.JWT_SECRET;
 
 const authenticate = (req, res, next) => {
@@ -34,8 +38,8 @@ const adminAuthorize = async (req, res, next) => {
 const checkUserPermission = (operation, resource) => {
   return async (req, res, next) => {
     const { requesterId } = req;
-    const targetId = Number(req.params.id);
-    const target = requesterId === targetId ? "OWN" : "ANY";
+    const targetUserId = await userIdLookup(resource, req.params.id);
+    const target = requesterId === targetUserId ? "OWN" : "ANY";
 
     if (!requesterId) {
       return res.status(401).json({ error: "unauthorized" });
@@ -47,6 +51,17 @@ const checkUserPermission = (operation, resource) => {
       return res.status(403).json({ error: "unauthenticated" });
     }
   };
+};
+
+const userIdLookup = async (resource, id) => {
+  const resources = {
+    USER: (id) => id,
+    POST: async (id) => {
+      const user = await selectUserByPostId(id);
+      return user.id;
+    },
+  };
+  return await resources[resource](Number(id));
 };
 
 module.exports = {
