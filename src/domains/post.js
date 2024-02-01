@@ -11,6 +11,12 @@ const createPostDb = async (title, userId) => await prisma.post.create({
   }
 })
 
+const findPostDb = async (id) => await prisma.post.findUnique({
+  where: {
+    id
+  }
+})
+
 const deletePostsDb = async (id) => await prisma.post.delete({
   where: {
     id
@@ -19,5 +25,6 @@ const deletePostsDb = async (id) => await prisma.post.delete({
 
 module.exports = {
   createPostDb,
+  findPostDb,
   deletePostsDb
 }
