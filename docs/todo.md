@@ -11,7 +11,7 @@
 ## routers
 
 - [x] add get users route
-- [ ] add delete user route
+- [x] add delete user route
 - [ ] add delete post route
 - [x] add relevant middleware to relevant routes
   
@@ -20,17 +20,19 @@
 - [x] add verifyAdminRole
   - [x] throw relevant errors based on test specs
 - [ ] check that error handling works as expected on delete routes once these are added
+  - [x] for users
+  - [x] for posts 
 
 ## controllers
 
 - [x] add get users route
 - [x] add get a user route
-- [ ] add delete user route
+- [x] add delete user route
 - [ ] add delete post route
   
 ## domains
 
 - [x] add get users route
 - [x] add get a user route
-- [ ] add delete user route
+- [x] add delete user route
 - [ ] add delete post route
