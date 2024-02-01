@@ -12,7 +12,7 @@ const createUser = async (req, res) => {
     }
         const createdUser = await createUserDb(username, password, role);
 
-        const token = jwt.sign(createdUser.id, secret)
+        const token = jwt.sign({sub: createdUser.id}, secret)
 
         return res.status(201).json({ user: createdUser, token: token });
     
