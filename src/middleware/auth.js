@@ -31,7 +31,7 @@ const verifyAdmin = async (req, res, next) => {
     next()
 }
 
-const verifyDeletePermissions = async (req, res, next) => {
+const verifyUserDeletePermissions = async (req, res, next) => {
     const userToDeleteID = Number(req.params.userId)
     const currentUserId = req.token.sub
     const currentUser = await findUserDb(currentUserId)
@@ -69,4 +69,4 @@ const verifyPostDeletePermissions = async (req, res, next) => {
     next()
 }
 
-module.exports = { verifyToken, verifyAdmin, verifyDeletePermissions, verifyPostDeletePermissions }
+module.exports = { verifyToken, verifyAdmin, verifyUserDeletePermissions, verifyPostDeletePermissions }
