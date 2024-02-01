@@ -8,8 +8,8 @@ const authenticate = (req, res, next) => {
     if (tokenType !== "Bearer") {
       throw new Error();
     }
-    const { sub: id } = jwt.verify(token, secret);
-    req.id = id;
+    const { sub } = jwt.verify(token, secret);
+    req.requesterId = sub;
     next();
   } catch (e) {
     res.status(401).json({ error: "unauthorized" });
@@ -17,14 +17,14 @@ const authenticate = (req, res, next) => {
 };
 
 const adminAuthorize = async (req, res, next) => {
-  const { id } = req;
+  const { requesterId } = req;
 
-  if (!id) {
+  if (!requesterId) {
     return res.status(401).json({ error: "unauthorized" });
   }
 
   try {
-    await selectAdminByIdDb(id)
+    await selectAdminByIdDb(requesterId)
     next()
   } catch (e) {
     return res.status(403).json({error: "unauthenticated"})
