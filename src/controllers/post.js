@@ -1,4 +1,5 @@
 const { createPostDb, deletePostsDb } = require('../domains/post.js')
+const messages = require('../errorMessages.js')
 
 const createPost = async (req, res) => {
   const {
@@ -8,7 +9,7 @@ const createPost = async (req, res) => {
 
   if (!title || !userId) {
     return res.status(400).json({
-      error: "Missing fields in request body"
+      error: messages.missingFields
     })
   }
 
