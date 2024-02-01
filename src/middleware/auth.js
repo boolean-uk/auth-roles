@@ -13,9 +13,11 @@ const verifyToken = async (req, res, next) => {
 
     const verifiedToken = jwt.verify(token, secret);
 
+    console.log("VERIFIED TOKEN--------->", verifiedToken)
+
     const foundUser = await prisma.user.findUnique({
         where: {
-            id: Number(verifiedToken),
+            id: Number(verifiedToken.sub),
         },
     });
 
@@ -24,9 +26,29 @@ const verifyToken = async (req, res, next) => {
     }
 
     delete foundUser.passwordHash;
+    console.log("FOUND USER---->",foundUser)
     req.user = foundUser;
     next();
 };
+
+const verifyUserOwnsPostOrAdmin = async (req, res, next) => {
+    const paramId = Number(req.params.id);
+    const userId = Number(req.user.id)
+
+    const foundPost = await prisma.post.findUnique({
+        where: {
+            id: paramId
+        }
+    })
+
+    const authorId = Number(foundPost.userId)
+
+    if (authorId === userId || req.user.role === "ADMIN"){
+        return next()
+    }
+
+    return res.status(403).json({ error: "Forbidden" })
+}
 
 const verifyAdminRole = (req, res, next) => {
     const id = Number(req.params.id);
@@ -46,4 +68,5 @@ const verifyAdminRole = (req, res, next) => {
 module.exports = {
     verifyToken,
     verifyAdminRole,
+    verifyUserOwnsPostOrAdmin
 };
