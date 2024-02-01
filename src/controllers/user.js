@@ -1,7 +1,10 @@
-const { jwt } = require("jsonwebtoken");
-
 const { PrismaClientKnownRequestError } = require("@prisma/client");
-const { createUserDb, getUsersDB } = require("../domains/user.js");
+const {
+  createUserDb,
+  getUsersDB,
+  findUserDB,
+  deleteUserDB,
+} = require("../domains/user.js");
 
 const createUser = async (req, res) => {
   const { username, password } = req.body;
@@ -32,10 +35,41 @@ const createUser = async (req, res) => {
 const getUsers = async (req, res) => {
   const users = await getUsersDB();
 
-  res.json({ users });
+  res.status(200).json({ users });
 };
+
+const deletUser = async (req, res) => {
+  const { id } = req.params;
+
+  const deletedUser = await deleteUserDB(id);
+
+  return res.json({ user: deletedUser });
+};
+
+// const deletUser = async (req, res) => {
+//   const { id } = req.params;
+
+//   if (req.user.id !== id && req.user.role !== "ADMIN") {
+//     return res
+//       .status(403)
+//       .json({
+//         error: "Forbidden: You don't have permission to delete this user.",
+//       });
+//   }
+
+//   const foundUser = await findUserDB(userIdToDelete);
+
+//   if (!foundUser) {
+//     return res.status(404).json({ error: "User not found." });
+//   }
+
+//   const deletedUser = await deleteUserDB(foundUser.id);
+
+//   return res.json({ user: deletedUser });
+// };
 
 module.exports = {
   createUser,
   getUsers,
+  deletUser,
 };
