@@ -31,7 +31,6 @@ const verifyAdmin = async (req, res, next) => {
         })
     }
 
-    delete foundUser.passwordHash
     next()
 }
 
@@ -50,7 +49,6 @@ const verifyDeletePermissions = async (req, res, next) => {
         })
     }
 
-    delete currentUser.passwordHash
     next()
 }
 
