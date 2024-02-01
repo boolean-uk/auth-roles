@@ -16,6 +16,15 @@ enum Role {
   ADMIN
 }
 
+model Admin {
+  id           Int      @id @default(autoincrement())
+  username     String   @unique
+  passwordHash String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  role         Role     @default(ADMIN)
+}
+
 // https://www.prisma.io/docs/concepts/components/prisma-schema/data-model
 model User {
   id           Int      @id @default(autoincrement())
