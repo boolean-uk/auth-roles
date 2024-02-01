@@ -34,4 +34,23 @@ const verifyAdmin = async (req, res, next) => {
     next()
 }
 
-module.exports = { verifyToken, verifyAdmin }
+const verifyDeletePermissions = async (req, res, next) => {
+    const userToDeleteID = Number(req.params.userId)
+    const currentUserId = req.token.sub
+    const currentUser = await findUserDb(currentUserId)
+
+    if (!currentUser) {
+        return res.status(401).json({ message: 'Unauthorised user' })
+    }
+
+    if (currentUser.role !== 'ADMIN' && currentUser.id !== userToDeleteID) {
+        return res.status(403).json({
+            error: "You do not have sufficient permission."
+        })
+    }
+
+    delete currentUser.passwordHash
+    next()
+}
+
+module.exports = { verifyToken, verifyAdmin, verifyDeletePermissions }
