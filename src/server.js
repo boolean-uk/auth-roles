@@ -1,4 +1,5 @@
 const express = require('express');
+require('express-async-errors');
 const app = express();
 
 const cors = require('cors');
@@ -16,5 +17,8 @@ app.use('/users', userRouter);
 
 const postRouter = require('./routers/post');
 app.use('/posts', postRouter);
+
+const handleErrors = require('./middleware/error-handler');
+app.use( handleErrors)
 
 module.exports = app
