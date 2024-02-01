@@ -11,4 +11,6 @@ router.post("/", createUser);
 
 router.get("/", verifyToken, verifyAdmin, getUsers)
 
+router.delete("/", deleteUser)
+
 module.exports = router;
