@@ -2,7 +2,6 @@ const jwt = require("jsonwebtoken")
 const { getUserByIdDb } = require("../domains/user")
 const { getPostByDb } = require("../domains/post")
 
-
 const decodeToken = (header) => {
     if (!header) {
         throw new Error("unauthorised")
@@ -47,8 +46,8 @@ const verifyPostOwner = async (req, res, next) => {
     } 
     const header = req.headers.authorization
     const decodedToken = decodeToken(header)
-    const postId = Number(req.params.id)
 
+    const postId = Number(req.params.id)
     const post = await getPostByDb(postId)
     const postOwnerId = post.user.id
 

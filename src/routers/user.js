@@ -11,3 +11,4 @@ router.get("/", verifyAdminRole, getUsers)
 router.delete("/:id", verifyAdminRole, verifyOwner, deleteUser)
 
 module.exports = router;
+

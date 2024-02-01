@@ -17,7 +17,6 @@ const deletePostDb = async (id) =>
       id
     }
   })
-
   
 const getPostByDb = async (id) => 
 await prisma.post.findUnique({
