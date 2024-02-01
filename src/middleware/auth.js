@@ -11,13 +11,9 @@ const verifyToken = async (req, res, next) => {
         })
     }
 
-    try {
-        const verifiedToken = jwt.verify(token, secret)
-        req.token = verifiedToken
-        next()
-    } catch (err) {
-        return res.status(400).json({ error: "Invalid or expired token" })
-    }
+    const verifiedToken = jwt.verify(token, secret)
+    req.token = verifiedToken
+    next()
 }
 
 const verifyAdmin = async (req, res, next) => {
