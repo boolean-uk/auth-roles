@@ -1,4 +1,4 @@
-const { createPostDb } = require('../domains/post.js')
+const { createPostDb, deletePostDb } = require('../domains/post.js')
 
 const createPost = async (req, res) => {
   const {
@@ -13,6 +13,13 @@ const createPost = async (req, res) => {
     return res.status(201).json({ post: createdPost })
 }
 
+const deletePost = async (req, res) => {
+  const id = Number(req.params.id)
+  const post = await deletePostDb(id)
+  return res.json({ post })
+}
+
 module.exports = {
-  createPost
+  createPost, 
+  deletePost
 }
