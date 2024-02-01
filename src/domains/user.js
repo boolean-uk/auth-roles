@@ -48,12 +48,12 @@ const deleteUserDb = async (id) => {
       },
       select: {
         id: true,
-        username: true
-      }
+        username: true,
+      },
     }),
   ];
 
-  return prisma.$transaction(deletions)
+  return prisma.$transaction(deletions);
 };
 
 const selectAllUsersDb = async () => {

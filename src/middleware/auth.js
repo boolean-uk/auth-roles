@@ -24,10 +24,10 @@ const adminAuthorize = async (req, res, next) => {
   }
 
   try {
-    await selectAdminByIdDb(requesterId)
-    next()
+    await selectAdminByIdDb(requesterId);
+    next();
   } catch (e) {
-    return res.status(403).json({error: "unauthenticated"})
+    return res.status(403).json({ error: "unauthenticated" });
   }
 };
 
@@ -35,22 +35,22 @@ const checkUserPermission = (operation, resource) => {
   return async (req, res, next) => {
     const { requesterId } = req;
     const targetId = Number(req.params.id);
-    const target = requesterId === targetId ? "OWN" : "ANY"
+    const target = requesterId === targetId ? "OWN" : "ANY";
 
     if (!requesterId) {
       return res.status(401).json({ error: "unauthorized" });
     }
     try {
-      await selectUserPermission(requesterId, operation, resource, target)
-      next()
+      await selectUserPermission(requesterId, operation, resource, target);
+      next();
     } catch (e) {
-      return res.status(403).json({error: "unauthenticated"})
+      return res.status(403).json({ error: "unauthenticated" });
     }
-  }
-}
+  };
+};
 
 module.exports = {
   adminAuthorize,
   authenticate,
-  checkUserPermission
+  checkUserPermission,
 };
