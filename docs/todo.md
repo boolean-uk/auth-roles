@@ -10,24 +10,27 @@
 
 ## routers
 
-- [ ] add get users route
-- [ ] (add post users login route?)
+- [x] add get users route
 - [ ] add delete user route
 - [ ] add delete post route
-- [ ] add relevant middleware to relevant routes
-  
-## controllers
-
-- [ ] add get users route
-- [ ] add delete user route
-- [ ] add delete post route
+- [x] add relevant middleware to relevant routes
   
 ## middleware
 
-- [ ] add verifyToken
-  - [ ] (throw 401 (unauthorised -> login required) if no token malformed?)
-  - [ ] throw 403 token malformed
-- [ ] add verifyAdminRole
-  - [ ] throw 403 if user is not an admin
-- [ ] add validateInput
-  - [ ] throw 400 if fields missing
+- [x] add verifyAdminRole
+  - [x] throw relevant errors based on test specs
+- [ ] check that error handling works as expected on delete routes once these are added
+
+## controllers
+
+- [x] add get users route
+- [x] add get a user route
+- [ ] add delete user route
+- [ ] add delete post route
+  
+## domains
+
+- [x] add get users route
+- [x] add get a user route
+- [ ] add delete user route
+- [ ] add delete post route
