@@ -73,7 +73,7 @@ async function createPermissions(role) {
         operation,
         target: "OWN",
         resource: "POST",
-        role: {
+        roles: {
           create: {
             roleId: role.id,
           },
