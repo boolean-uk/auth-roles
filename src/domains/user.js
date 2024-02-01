@@ -110,10 +110,23 @@ const selectUserPermission = async (userId, operation, resource, target) => {
   });
 };
 
+const selectUserByPostId = async (postId) => {
+  return await prisma.user.findFirstOrThrow({
+    where: {
+      posts: {
+        some: {
+          id: postId
+        }
+      }
+    }
+  })
+}
+
 module.exports = {
   createUserDb,
   deleteUserDb,
   selectAdminByIdDb,
   selectAllUsersDb,
+  selectUserByPostId,
   selectUserPermission,
 };
