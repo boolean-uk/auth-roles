@@ -6,7 +6,7 @@ const verifyToken = async (req, res, next) => {
     const header = req.header("authorization");
 
     if (!header) {
-        return res.status(400).json({ message: "missing auth token" });
+        return res.status(400).json({ error: "Missing auth token" });
     }
 
     const [_, token] = header.split(" ");
@@ -20,20 +20,25 @@ const verifyToken = async (req, res, next) => {
     });
 
     if (!foundUser) {
-        return res.status(404).json({ message: "User not found" });
+        return res.status(404).json({ error: "User not found" });
     }
 
-    delete foundUser.password;
+    delete foundUser.passwordHash;
     req.user = foundUser;
     next();
 };
 
 const verifyAdminRole = (req, res, next) => {
+    const id = Number(req.params.id);
+    
     if (!req.user) {
-        res.status(401).json({ message: "Unauthorized" });
+        res.status(401).json({ error: "Unauthorized" });
+    }
+    if (req.user.id === id) {
+        return next();
     }
     if (req.user.role !== "ADMIN") {
-        res.status(403).json({ message: "Forbidden" });
+        res.status(403).json({ error: "Forbidden" });
     }
     next();
 };
