@@ -54,6 +54,7 @@ const createUser = async (req, res) => {
 
 const deleteUser = async (req, res) => {
   try {
+    
     const { userId } = req.params;
     const user = await deleteUserDb(userId);
     res.status(200).json({ message: 'User deleted successfully', user });
@@ -66,6 +67,7 @@ const deleteUser = async (req, res) => {
     }
   }
 };
+
 
 
 module.exports = {

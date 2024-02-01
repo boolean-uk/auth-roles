@@ -5,6 +5,7 @@ const checkAdminUser = (role) => {
     throw errorCreator('Your role must be an Admin', 403)
   }
 
+  
   return true
 }
 
