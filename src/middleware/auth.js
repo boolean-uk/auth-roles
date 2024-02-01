@@ -1,6 +1,8 @@
 const jwt = require("jsonwebtoken");
+const prisma = require("../utils/prisma");
+const secret = process.env.JWT_SECRET;
 
-const verifyToken = (req, res, next) => {
+const verifyToken = async (req, res, next) => {
     const header = req.header("authorization");
 
     if (!header) {
@@ -8,21 +10,22 @@ const verifyToken = (req, res, next) => {
     }
 
     const [_, token] = header.split(" ");
-   
-        const verifiedToken = jwt.verify(token, "secret");
 
-        const foundUser = users.find(
-            (user) => user.username === verifiedToken.username
-        );
+    const verifiedToken = jwt.verify(token, secret);
 
-        if (!foundUser) {
-            return res.status(404).json({ message: "User not found" });
-        }
+    const foundUser = await prisma.user.findUnique({
+        where: {
+            id: Number(verifiedToken),
+        },
+    });
 
-        delete foundUser.password;
-        req.user = foundUser;
+    if (!foundUser) {
+        return res.status(404).json({ message: "User not found" });
+    }
 
-        next();
+    delete foundUser.password;
+    req.user = foundUser;
+    next();
 };
 
 const verifyAdminRole = (req, res, next) => {
