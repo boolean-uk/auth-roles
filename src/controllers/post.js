@@ -1,7 +1,8 @@
 const { PrismaClientKnownRequestError } = require("@prisma/client");
-const prisma = require('../utils/prisma'); 
+const prisma = require("../utils/prisma");
 const { createPostDb } = require("../domains/post.js");
-const { verifyUser } = require('../utils/help.js')
+const { verifyUser } = require("../utils/help.js");
+
 
 const createPost = async (req, res) => {
   const { title, userId } = req.body;
@@ -51,22 +52,24 @@ const deletePost = async (req, res) => {
       return res.status(404).json({ error: "Post not found" });
     }
 
-    if (post.userId !== user.id && user.role !== "admin") {
-      return res
-        .status(403)
-        .json({ error: "You do not have permission to delete this post" });
+    // Check user role or ownership
+    if (post.userId !== user.id && user.role !== "ADMIN") {
+      return res.status(403).json({ error: "You do not have permission to delete this post" });
     }
 
-    await prisma.post.delete({
-      where: { id: parseInt(postId) },
+    // Delete the post and return its details
+    const deletedPost = await prisma.post.delete({
+      where: { id: parseInt(postId, 10) },
     });
 
-    res.status(200).json({ message: "Post deleted successfully" });
+    // Assuming you want to return the deleted post details as per the test expectation
+    res.status(200).json({ message: "Post deleted successfully", post: deletedPost });
   } catch (error) {
     console.error("Error deleting post:", error);
     res.status(500).json({ error: "Internal server error" });
   }
 };
+
 
 module.exports = {
   // export other functions if they exist

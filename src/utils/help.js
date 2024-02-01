@@ -12,4 +12,6 @@ const verifyUser = async (token) => {
   return foundUser
 }
 
+
+
 module.exports = { verifyUser }
