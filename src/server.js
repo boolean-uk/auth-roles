@@ -28,7 +28,7 @@ app.use((err, req, res, next) => {
         }
         if (err.code === "P2025") {
             return res.status(409).json({ error: "A user with the provided ID does not exist" })
-          }
+        }
     }
 
     res.status(500).json({ message: "Oops, something went wrong." })
