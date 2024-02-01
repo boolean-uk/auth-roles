@@ -1,4 +1,3 @@
-const { PrismaClientKnownRequestError } = require("@prisma/client")
 const { createUserDb, getUsersDb } = require('../domains/user.js')
 const jwt = require('jsonwebtoken')
 const secret = process.env.JWT_SECRET
@@ -22,19 +21,9 @@ const createUser = async (req, res) => {
     })
   }
 
-  try {
     const createdUser = await createUserDb(username, password, role)
     const token = jwt.sign({ sub: createdUser.id }, secret)
     return res.status(201).json({ user: createdUser, token })
-  } catch (e) {
-    if (e instanceof PrismaClientKnownRequestError) {
-      if (e.code === "P2002") {
-        return res.status(409).json({ error: "A user with the provided username already exists" })
-      }
-    }
-
-    res.status(500).json({ error: e.message })
-  }
 }
 
 const getUsers = async (req, res) => {
