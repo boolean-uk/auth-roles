@@ -1,5 +1,3 @@
-const { PrismaClientKnownRequestError } = require('@prisma/client')
-
 // DB
 const {
   getAllUsersDb,
@@ -7,17 +5,16 @@ const {
   deleteUserDb
 } = require('../domains/user.js')
 
+// Error handler
+const { checkUserNameExist } = require('../errors/userErrorHandler.js')
+
 // Helpers
 const { getUserById } = require('../helpers/userHelpers.js')
 
 const getAllUsers = async (req, res) => {
-  try {
-    const usersList = await getAllUsersDb()
+  const usersList = await getAllUsersDb()
 
-    res.status(200).json({ users: usersList })
-  } catch (error) {
-    res.status(error.status ?? 500).json({ error: error.message })
-  }
+  res.status(200).json({ users: usersList })
 }
 
 const createUser = async (req, res) => {
@@ -29,35 +26,21 @@ const createUser = async (req, res) => {
     })
   }
 
-  try {
-    const createdUser = await createUserDb(username, password)
+  await checkUserNameExist(username)
 
-    return res.status(201).json({ user: createdUser })
-  } catch (e) {
-    if (e instanceof PrismaClientKnownRequestError) {
-      if (e.code === 'P2002') {
-        return res
-          .status(409)
-          .json({ error: 'A user with the provided username already exists' })
-      }
-    }
+  const createdUser = await createUserDb(username, password)
 
-    res.status(error.status ?? 500).json({ error: error.message })
-  }
+  return res.status(201).json({ user: createdUser })
 }
 
 const deleteUser = async (req, res) => {
   const { userId } = req.params
 
-  try {
-    const foundUser = await getUserById(userId)
+  const foundUser = await getUserById(userId)
 
-    const deletedUser = await deleteUserDb(foundUser.id)
+  const deletedUser = await deleteUserDb(foundUser.id)
 
-    res.status(200).json({ user: deletedUser })
-  } catch (error) {
-    res.status(error.status ?? 500).json({ error: error.message })
-  }
+  res.status(200).json({ user: deletedUser })
 }
 
 module.exports = {

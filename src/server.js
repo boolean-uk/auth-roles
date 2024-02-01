@@ -1,4 +1,5 @@
 const express = require('express')
+require('express-async-errors')
 const app = express()
 
 const cors = require('cors')
@@ -16,5 +17,9 @@ app.use('/users', userRouter)
 
 const postRouter = require('./routers/post')
 app.use('/posts', postRouter)
+
+app.use((err, req, res, next) => {
+  res.status(err.status ?? 500).json({ error: err.message })
+})
 
 module.exports = app

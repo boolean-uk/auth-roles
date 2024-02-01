@@ -10,6 +10,16 @@ const getPostByIdDb = async (postId) => {
   return foundPost
 }
 
+const getPostByTitleDb = async (title) => {
+  const foundPost = await prisma.post.findFirst({
+    where: {
+      title: title
+    }
+  })
+
+  return foundPost
+}
+
 const createPostDb = async (title, userId) => {
   const createdPost = await prisma.post.create({
     data: {
@@ -37,6 +47,7 @@ const deletePostDb = async (postId) => {
 
 module.exports = {
   getPostByIdDb,
+  getPostByTitleDb,
   createPostDb,
   deletePostDb
 }

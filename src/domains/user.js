@@ -17,6 +17,16 @@ const getUserBySubDb = async (sub) => {
   return foundUser
 }
 
+const getUserByNameDb = async (username) => {
+  const foundUser = await prisma.user.findFirst({
+    where: {
+      username: username
+    }
+  })
+
+  return foundUser
+}
+
 const createUserDb = async (username, password) => {
   const createdUser = await prisma.user.create({
     data: {
@@ -41,6 +51,7 @@ const deleteUserDb = async (userId) => {
 module.exports = {
   getAllUsersDb,
   getUserBySubDb,
+  getUserByNameDb,
   createUserDb,
   deleteUserDb
 }
