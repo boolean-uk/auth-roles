@@ -1,11 +1,11 @@
 const express = require("express");
-const {
-  createUser
-} = require('../controllers/user');
+const { createUser, getUsers } = require("../controllers/user");
+const { verifyAdminRole, verifyToken }  = require('../middleware/auth.js')
 
 const router = express.Router();
 
-router.post("/", createUser);
-router.get("/", (req, res) => {console.log("Hello I am a console log", req.headers.authorization)})
+router.post("/",  createUser);
+
+router.get("/",verifyToken, verifyAdminRole, getUsers );
 
 module.exports = router;
