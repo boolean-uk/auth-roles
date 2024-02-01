@@ -13,19 +13,9 @@ const createPost = async (req, res) => {
     })
   }
 
-  try {
-    const createdPost = await createPostDb(title, userId)
+  const createdPost = await createPostDb(title, userId)
 
-    return res.status(201).json({ post: createdPost })
-  } catch (e) {
-    if (e instanceof PrismaClientKnownRequestError) {
-      if (e.code === "P2025") {
-        return res.status(409).json({ error: "A user with the provided ID does not exist" })
-      }
-    }
-
-    res.status(500).json({ error: e.message })
-  }
+  return res.status(201).json({ post: createdPost })
 }
 
 module.exports = {
