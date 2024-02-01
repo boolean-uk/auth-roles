@@ -1,6 +1,7 @@
 const { createUserDb, getUsersDb, findUserDb, deleteUserDb } = require('../domains/user.js')
 const jwt = require('jsonwebtoken')
 const secret = process.env.JWT_SECRET
+const messages = require('../errorMessages.js')
 
 const createUser = async (req, res) => {
   const {
@@ -11,13 +12,13 @@ const createUser = async (req, res) => {
 
   if (!username || !password) {
     return res.status(400).json({
-      error: "Missing fields in request body"
+      error: messages.missingFields
     })
   }
 
   if (role !== 'ADMIN' && role !== 'USER') {
     return res.status(400).json({ 
-      error: "Valid roles are 'USER' or 'ADMIN'"
+      error: messages.validRoles
     })
   }
 
@@ -36,7 +37,7 @@ const deleteUser = async (req, res) => {
   const userExists = await findUserDb(userId)
   
   if (!userExists) {
-    return res.status(400).json({ error: "User does not exist" })
+    return res.status(400).json({ error: messages.noUser })
   }
 
   await deleteUserDb(userId)
