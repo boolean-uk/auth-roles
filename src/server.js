@@ -1,20 +1,47 @@
-const express = require('express');
+const express = require("express");
+require("express-async-errors");
+
 const app = express();
 
-const cors = require('cors');
-const morgan = require('morgan');
+const { PrismaClientKnownRequestError } = require("@prisma/client");
 
-app.disable('x-powered-by');
+const cors = require("cors");
+const morgan = require("morgan");
+
+app.disable("x-powered-by");
 
 app.use(cors());
-app.use(morgan('dev'));
+app.use(morgan("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-const userRouter = require('./routers/user');
-app.use('/users', userRouter);
+const userRouter = require("./routers/user");
+app.use("/users", userRouter);
 
-const postRouter = require('./routers/post');
-app.use('/posts', postRouter);
+const postRouter = require("./routers/post");
+app.use("/posts", postRouter);
 
-module.exports = app
+app.use((err, req, res, next) => {
+
+    console.log("ERROR CONSOLE LOG (APP LEVEL) ------>  ", err);
+
+    if (err instanceof PrismaClientKnownRequestError) {
+        if (err.code === "P2002") {
+            return res.status(409).json({
+                error: "A user with the provided username already exists",
+            });
+        }
+        if (err.code === "P2025") {
+            return res
+                .status(409)
+                .json({
+                    error: "A user with the provided ID does not exist",
+                });
+        }
+        ;
+    }
+
+    return res.status(500).json({ message: "Internal error" })
+});
+
+module.exports = app;
