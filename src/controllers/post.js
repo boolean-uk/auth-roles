@@ -1,11 +1,17 @@
 const { createPostDb, deletePostDb } = require("../domains/post.js");
 
+
 const createPost = async (req, res) => {
-    const {title}  = req.body;
-    const userId = req.user.id
+    const { title, userId }  = req.body;
+    const currentUserId = req.user.id
+    // console.log("TITLE----->>>", title)
+    // console.log("USERID------>>>", userId)
 
+    if(currentUserId !== userId){
+        return res.status(409).json({error: "You cannot create a post for someone else"})
+    }
 
-    if (!title || !userId) {
+    if (!title) {
         return res.status(400).json({
             error: "Missing fields in request body",
         });
@@ -14,6 +20,7 @@ const createPost = async (req, res) => {
 
         return res.status(201).json({ post: createdPost });
 };
+
 
 const deletePost = async (req, res) => {
     const postId  = Number(req.params.id)
