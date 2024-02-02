@@ -15,7 +15,7 @@ const verifyAdminRole = async (req, res, next) => {
     const header = req.headers.authorization
     const decodedToken = decodeToken(header)
     const foundUser = await getUserByIdDb(decodedToken.sub)
-    if (!foundUser || foundUser.role !== "ADMIN") {
+    if (!foundUser || foundUser.role.name !== "ADMIN") {
         if(req.params.id) {
             return next()    
         }
