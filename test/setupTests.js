@@ -3,7 +3,9 @@ const prisma = require("../src/utils/prisma")
 const deleteTables = () => {
   const deleteTables = [
     prisma.post.deleteMany(),
-    prisma.user.deleteMany()
+    prisma.user.deleteMany(), 
+    prisma.role.deleteMany(), 
+    prisma.permission.deleteMany()
   ];
 
   return prisma.$transaction(deleteTables)
