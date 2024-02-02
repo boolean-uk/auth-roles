@@ -5,7 +5,7 @@ const { faker } = require('@faker-js/faker');
 
 async function seed() {
   const users = []
-
+  
   while (users.length < 10) {
     const user = await createUser(faker.internet.userName(), '123456789')
     users.push(user)
@@ -27,10 +27,39 @@ async function createUser(username, password) {
       passwordHash: await bcrypt.hash(password, 6),
       posts: {
         create: posts
-      }
+      }, 
+      role: {
+        connectOrCreate: {
+          where:{
+            name: "USER"
+          },
+          create:{
+            name: "USER",
+            permissions: {
+              create:[
+                {
+                  name: "CREATE_POSTS"
+                },
+                {
+                  name: "DELETE_MY_POST"
+                },
+                {
+                  name: "DELETE_MY_USER"
+                }
+              ]
+            }
+          }
+
+        }
+      }   
     },
     include: {
-      posts: true
+      posts: true, 
+      role: {
+        include: {
+          permissions: true
+        }
+      }
     }
   })
 
