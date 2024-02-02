@@ -66,6 +66,7 @@ describe("Post Endpoint", () => {
 
             const response = await supertest(app)
                 .delete(`/posts/${post.id}`)
+
                 .auth(token, { type: "bearer" })
                 .send();
 
@@ -73,6 +74,15 @@ describe("Post Endpoint", () => {
             expect(response.body.post).not.toEqual(undefined);
             expect(response.body.post.title).toEqual("Hello, world!");
         });
+
+                .auth(token, {type: 'bearer'})
+                .send()
+            
+            expect(response.status).toEqual(200)
+            expect(response.body.post).not.toEqual(undefined)
+            expect(response.body.post.title).toEqual('Hello, world!')
+        })
+
 
         it("should let a user delete their own posts", async () => {
             const user = await createUser("john", "123456");
@@ -81,6 +91,7 @@ describe("Post Endpoint", () => {
 
             const response = await supertest(app)
                 .delete(`/posts/${post.id}`)
+
                 .auth(token, { type: "bearer" })
                 .send();
 
@@ -88,6 +99,15 @@ describe("Post Endpoint", () => {
             expect(response.body.post).not.toEqual(undefined);
             expect(response.body.post.title).toEqual("Hello, world!");
         });
+
+                .auth(token, {type: 'bearer'})
+                .send()
+            
+            expect(response.status).toEqual(200)
+            expect(response.body.post).not.toEqual(undefined)
+            expect(response.body.post.title).toEqual('Hello, world!')
+        })
+
 
         it("should return a 403 status code when a user tries to delete another users post", async () => {
             const user1 = await createUser("john", "123456");
@@ -101,6 +121,7 @@ describe("Post Endpoint", () => {
 
             const response = await supertest(app)
                 .delete(`/posts/${post.id}`)
+
                 .auth(token, { type: "bearer" })
                 .send();
 
@@ -109,3 +130,13 @@ describe("Post Endpoint", () => {
         });
     });
 });
+
+                .auth(token, {type: 'bearer'})
+                .send()
+            
+            expect(response.status).toEqual(403)
+            expect(response.body).toHaveProperty('error')
+        })
+    })
+})
+

@@ -47,3 +47,5 @@ jobs:
     - run: npm ci
     - run: npm run test:migration
     - run: npx jest --bail -i test/api/routes
+      env:
+        JWT_SECRET: hjFh9uF9043f9hfF9hfaq43
