@@ -13,7 +13,7 @@ const verifyToken = async (req, res, next) => {
 
     const verifiedToken = jwt.verify(token, secret);
 
-    console.log("VERIFIED TOKEN--------->", verifiedToken)
+    // console.log("VERIFIED TOKEN--------->", verifiedToken)
 
     const foundUser = await prisma.user.findUnique({
         where: {
@@ -26,7 +26,9 @@ const verifyToken = async (req, res, next) => {
     }
 
     delete foundUser.passwordHash;
-    console.log("FOUND USER---->",foundUser)
+
+    // console.log("FOUND USER---->",foundUser)
+
     req.user = foundUser;
     next();
 };

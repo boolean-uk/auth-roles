@@ -22,7 +22,9 @@ const postRouter = require("./routers/post");
 app.use("/posts", postRouter);
 
 app.use((err, req, res, next) => {
+
     console.log("ERROR CONSOLE LOG (APP LEVEL) ------>  ", err);
+
     if (err instanceof PrismaClientKnownRequestError) {
         if (err.code === "P2002") {
             return res.status(409).json({
@@ -38,6 +40,7 @@ app.use((err, req, res, next) => {
         }
         ;
     }
+
     return res.status(500).json({ message: "Internal error" })
 });
 
