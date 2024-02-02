@@ -42,15 +42,15 @@ describe("User Endpoint", () => {
     });
   });
 
-  describe("GET /users", () => {
-    it("should let admins get a list of users", async () => {
-      const admin = await createUser("admin", "123456", "ADMIN"); // create an admin user
-      const token = jwt.sign({ sub: admin.id }, process.env.JWT_SECRET);
+    describe("GET /users", () => {
+        it("should let admins get a list of users", async () => {
+            const admin = await createUser('admin', '123456', 'ADMIN') // create an admin user
+            const token = jwt.sign({ sub: admin.id }, process.env.JWT_SECRET)
 
-      let i = 5;
-      while (i-- > 0) {
-        await createUser(`user${i}`, "123456");
-      }
+            let i = 5
+            while (i --> 0) {
+                await createUser(`user${i}`, '123456')
+            }
 
       const response = await supertest(app)
         .get("/users")
@@ -71,10 +71,12 @@ describe("User Endpoint", () => {
         await createUser(`user${i}`, "123456");
       }
 
+
       const response = await supertest(app)
         .get("/users")
         .auth(token, { type: "bearer" })
         .send();
+
 
       expect(response.status).toEqual(403);
       expect(response.body).toHaveProperty("error");
@@ -109,6 +111,7 @@ describe("User Endpoint", () => {
         .delete(`/users/${userToDelete.id}`)
         .auth(token, { type: "bearer" })
         .send();
+
 
       expect(response.status).toEqual(403);
       expect(response.body).toHaveProperty("error");

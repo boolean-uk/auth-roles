@@ -65,6 +65,15 @@ describe("Post Endpoint", () => {
       const post = await createPost("Hello, world!", user.id);
       const token = jwt.sign({ sub: user.id }, process.env.JWT_SECRET);
 
+            const response = await supertest(app)
+                .delete(`/posts/${post.id}`)
+                .auth(token, {type: 'bearer'})
+                .send()
+            
+            expect(response.status).toEqual(200)
+            expect(response.body.post).not.toEqual(undefined)
+            expect(response.body.post.title).toEqual('Hello, world!')
+        })
       const response = await supertest(app)
         .delete(`/posts/${post.id}`)
         .auth(token, { type: "bearer" })
@@ -85,6 +94,16 @@ describe("Post Endpoint", () => {
       // user2's token
       const token = jwt.sign({ sub: user2.id }, process.env.JWT_SECRET);
 
+            const response = await supertest(app)
+                .delete(`/posts/${post.id}`)
+                .auth(token, {type: 'bearer'})
+                .send()
+            
+            expect(response.status).toEqual(403)
+            expect(response.body).toHaveProperty('error')
+        })
+    })
+})
       const response = await supertest(app)
         .delete(`/posts/${post.id}`)
         .auth(token, { type: "bearer" })
