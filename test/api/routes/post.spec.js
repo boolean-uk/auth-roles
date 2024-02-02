@@ -22,7 +22,6 @@ describe("Post Endpoint", () => {
                 .set('Authorization', `Bearer ${token}`)
                 .send(request);
 
-            console.log(response.message)
             expect(response.status).toEqual(201);
             expect(response.body.post).not.toEqual(undefined);
             expect(response.body.post.id).not.toEqual(undefined);
