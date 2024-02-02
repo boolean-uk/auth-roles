@@ -12,8 +12,6 @@ const verifyToken = async (req, res, next) => {
     const [_, token] = header.split(" ");
     const verifiedToken = jwt.verify(token, secret);
 
-    // console.log("VERIFIED TOKEN--------->", verifiedToken)
-
     const foundUser = await prisma.user.findUnique({
         where: {
             id: Number(verifiedToken.sub),
