@@ -20,7 +20,9 @@ model User {
   updatedAt     DateTime  @updatedAt
 
   posts         Post[]
+  role          Role      @default(USER)
 }
+
 
 model Post {
   id          Int       @id @default(autoincrement())
@@ -30,4 +32,9 @@ model Post {
 
   userId      Int
   user        User      @relation(fields: [userId], references: [id])
+}
+
+enum Role {
+  ADMIN
+  USER
 }
