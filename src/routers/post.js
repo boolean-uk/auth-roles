@@ -8,6 +8,7 @@ const {verifyToken, verifyUserOwnsPostOrAdmin} = require('../middleware/auth.js'
 const router = express.Router();
 
 router.post("/", verifyToken, createPost);
-router.delete("/:id", verifyToken, verifyUserOwnsPostOrAdmin, deletePost )
+
+router.delete("/:id", verifyToken,  deletePost )
 
 module.exports = router;
