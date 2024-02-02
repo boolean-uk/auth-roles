@@ -19,7 +19,7 @@ describe("User Endpoint", () => {
             expect(response.body.user).not.toEqual(undefined)
             expect(response.body.user.id).not.toEqual(undefined)
             expect(response.body.user.username).toEqual(request.username)
-            expect(response.body.user.role).toEqual('USER')
+            expect(response.body.user.role.name).toEqual('USER')
         })
 
         it("will return 400 if one of the required fields is missing", async () => {
@@ -89,7 +89,7 @@ describe("User Endpoint", () => {
         it("should let admins delete a user", async () => {
             const admin = await createUser('admin', '123456', 'ADMIN') // create an admin user
             const token = jwt.sign({ sub: admin.id }, process.env.JWT_SECRET)
-
+            console.log(admin)
             const user = await createUser('john', '123456')
 
             const response = await supertest(app)

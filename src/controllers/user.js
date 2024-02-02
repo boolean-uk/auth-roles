@@ -1,5 +1,4 @@
-const { PrismaClientKnownRequestError } = require("@prisma/client")
-const { createUserDb } = require('../domains/user.js')
+const { createUserDb, getUsersDb, deleteUserDb } = require('../domains/user.js')
 
 const createUser = async (req, res) => {
   const {
@@ -8,26 +7,30 @@ const createUser = async (req, res) => {
   } = req.body
 
   if (!username || !password) {
-    return res.status(400).json({
-      error: "Missing fields in request body"
-    })
+    throw new Error ("missing input")
   }
-
-  try {
     const createdUser = await createUserDb(username, password)
-
+    delete createdUser.password
     return res.status(201).json({ user: createdUser })
-  } catch (e) {
-    if (e instanceof PrismaClientKnownRequestError) {
-      if (e.code === "P2002") {
-        return res.status(409).json({ error: "A user with the provided username already exists" })
-      }
-    }
+}
 
-    res.status(500).json({ error: e.message })
-  }
+const getUsers = async (req, res) => {
+  const usersWithPasswords = await getUsersDb()
+  const users = usersWithPasswords.map(user => {
+    delete user.password
+  })
+  res.json({ users })
+}
+
+const deleteUser = async (req,res) => {
+  const id = Number(req.params.id)
+  const user = await deleteUserDb(id)
+  delete user.password
+  res.json({ user })
 }
 
 module.exports = {
-  createUser
+  createUser, 
+  getUsers, 
+  deleteUser
 }

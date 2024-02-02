@@ -18,6 +18,8 @@ model User {
   passwordHash  String
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
+  roleId        Int       
+  role          Role      @relation(fields: [roleId], references: [id])
 
   posts         Post[]
 }
@@ -31,3 +33,19 @@ model Post {
   userId      Int
   user        User      @relation(fields: [userId], references: [id])
 }
+
+model Role {
+  id          Int        @id @default(autoincrement())
+  name        String     @unique
+  users       User[]
+  permissions Permission[]
+}
+
+model Permission {
+  id        Int          @id @default(autoincrement())
+  name      String       @unique
+  roles     Role[]
+  createdAt DateTime     @default(now()) 
+  updatedAt DateTime     @updatedAt
+}
+
