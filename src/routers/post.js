@@ -5,6 +5,6 @@ const { verifyToken, verifyAdminRole } = require("../middleware/auth");
 const router = express.Router();
 
 router.post("/", createPost);
-router.delete("/:id", verifyToken, verifyAdminRole, deletePost);
+router.delete("/:id", verifyToken, deletePost);
 
 module.exports = router;

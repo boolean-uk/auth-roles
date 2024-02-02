@@ -1,5 +1,9 @@
 const { PrismaClientKnownRequestError } = require("@prisma/client");
-const { createPostDb, deletePostDB } = require("../domains/post.js");
+const {
+  createPostDb,
+  deletePostDB,
+  getAuthorByPostId,
+} = require("../domains/post.js");
 
 const createPost = async (req, res) => {
   const { title, userId } = req.body;
@@ -29,10 +33,25 @@ const createPost = async (req, res) => {
 
 const deletePost = async (req, res) => {
   const { id } = req.params;
+  const author = await getAuthorByPostId(req.params.id);
 
+  let isForbidden = true; // default it to not allowed
+  let admin = false;
+
+  if (req.user.role === "ADMIN") {
+    isForbidden = false;
+    admin = true;
+  }
+  if (req.user.id === author.id) {
+    isForbidden = false;
+  }
+
+  if (isForbidden) {
+    return res.status(403).json({ error: "forbidden" });
+  }
   const deletedPost = await deletePostDB(id);
 
-  return res.json({ post: deletedPost });
+  return res.status(200).json({ post: deletedPost });
 };
 
 module.exports = {

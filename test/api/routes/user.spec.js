@@ -116,7 +116,10 @@ describe("User Endpoint", () => {
 
     it("should let users delete themselves", async () => {
       const user = await createUser("john", "123456");
-      const token = jwt.sign({ sub: user.id }, process.env.JWT_SECRET);
+      const token = jwt.sign(
+        { sub: user.id },
+        process.env.JWT_SECRET
+      );
 
       const response = await supertest(app)
         .delete(`/users/${user.id}`)

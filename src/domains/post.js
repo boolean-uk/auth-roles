@@ -20,8 +20,17 @@ const deletePostDB = async (id) => {
   return await prisma.post.delete({ where: { id: Number(id) } });
 };
 
+const getAuthorByPostId = async (id) => {
+  const post = await prisma.post.findUnique({
+    where: { id: Number(id) },
+    include: { user: true },
+  });
+  return post.user;
+};
+
 module.exports = {
   createPostDb,
   findPostDB,
   deletePostDB,
+  getAuthorByPostId,
 };

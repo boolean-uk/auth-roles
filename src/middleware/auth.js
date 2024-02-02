@@ -1,5 +1,6 @@
 const jwt = require("jsonwebtoken");
 const { findUserDB } = require("../domains/user.js");
+const { getAuthorByPostId } = require("../domains/post.js");
 
 const verifyToken = async (req, res, next) => {
   //   const header = req.header("Authorization");
@@ -16,7 +17,7 @@ const verifyToken = async (req, res, next) => {
     const verifiedToken = jwt.verify(token, process.env.JWT_SECRET);
 
     const foundUser = await findUserDB(verifiedToken.sub);
-    delete foundUser.password;
+    delete foundUser.passwordHash;
 
     req.user = foundUser;
 
@@ -27,13 +28,12 @@ const verifyToken = async (req, res, next) => {
   }
 };
 
-const verifyAdminRole = (req, res, next) => {
+const verifyAdminRole = async (req, res, next) => {
   const { id } = req.params;
 
   if (!req.user) {
     return res.status(401).json({ error: "Unauthorized" });
   }
-  console.log(req.user);
 
   if (req.user.role !== "ADMIN") {
     return res.status(403).json({ error: "Forbidden" });
