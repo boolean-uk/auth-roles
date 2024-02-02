@@ -54,13 +54,8 @@ describe("User Endpoint", () => {
 
             const response = await supertest(app)
                 .get("/users")
-
                 .auth(token, { type: "bearer" })
                 .send();
-
-                .auth(token, {type: 'bearer'})
-                .send()
-
 
             expect(response.status).toEqual(200);
             expect(response.body.users).not.toEqual(undefined);
@@ -78,13 +73,8 @@ describe("User Endpoint", () => {
 
             const response = await supertest(app)
                 .get("/users")
-
                 .auth(token, { type: "bearer" })
                 .send();
-
-                .auth(token, {type: 'bearer'})
-                .send()
-
 
             expect(response.status).toEqual(403);
             expect(response.body).toHaveProperty("error");
@@ -100,13 +90,8 @@ describe("User Endpoint", () => {
 
             const response = await supertest(app)
                 .delete(`/users/${user.id}`)
-
                 .auth(token, { type: "bearer" })
                 .send();
-
-                .auth(token, {type: 'bearer'})
-                .send()
-
 
             expect(response.status).toEqual(200);
             expect(response.body.user).not.toEqual(undefined);
@@ -121,13 +106,8 @@ describe("User Endpoint", () => {
 
             const response = await supertest(app)
                 .delete(`/users/${userToDelete.id}`)
-
                 .auth(token, { type: "bearer" })
                 .send();
-
-                .auth(token, {type: 'bearer'})
-                .send()
-
 
             expect(response.status).toEqual(403);
             expect(response.body).toHaveProperty("error");
@@ -139,7 +119,6 @@ describe("User Endpoint", () => {
 
             const response = await supertest(app)
                 .delete(`/users/${user.id}`)
-
                 .auth(token, { type: "bearer" })
                 .send();
 
@@ -150,15 +129,3 @@ describe("User Endpoint", () => {
         });
     });
 });
-
-                .auth(token, {type: 'bearer'})
-                .send()
-
-            expect(response.status).toEqual(200)
-            expect(response.body.user).not.toEqual(undefined)
-            expect(response.body.user.id).toEqual(user.id)
-            expect(response.body.user.username).toEqual(user.username)
-        })
-    })
-})
-
