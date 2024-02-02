@@ -32,7 +32,7 @@ const createPost = async (req, res) => {
 };
 
 const deletePost = async (req, res) => {
-  const { id } = req.params;
+  const id = +req.params.id;
   const author = await getAuthorByPostId(req.params.id);
 
   let isForbidden = true; // default it to not allowed
