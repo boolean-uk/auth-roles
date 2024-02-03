@@ -12,13 +12,19 @@ const createUserDb = async (username, password, role) =>
 
 const getAllUsersDb = async () => await prisma.user.findMany();
 
-const findUserByUsernameDb = async (username) =>
+const deleteUserByIdDb = async (id) =>
+  await prisma.user.delete({
+    where: { id },
+  });
+
+const findUserByIdDb = async (id) =>
   await prisma.user.findUnique({
-    where: { username },
+    where: { id },
   });
 
 module.exports = {
   createUserDb,
-  findUserByUsernameDb,
   getAllUsersDb,
+  deleteUserByIdDb,
+  findUserByIdDb,
 };
