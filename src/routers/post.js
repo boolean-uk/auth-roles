@@ -1,10 +1,25 @@
-const express = require("express");
+const express = require('express')
+const { createPost, deletePost } = require('../controllers/post')
+const { verifyToken, verifyAdmin } = require('../middleware/auth')
 const {
-  createPost
-} = require('../controllers/post');
+  createPostPermission,
+  deletePostPermission
+} = require('../middleware/permissions')
+const {
+  createPostErrorHandler,
+  deletePostErrorHandler
+} = require('../middleware/errorsHandler')
 
-const router = express.Router();
+const router = express.Router()
 
-router.post("/", createPost);
+router.post('/', createPostErrorHandler, createPostPermission, createPost)
+router.delete(
+  '/:postId',
+  deletePostErrorHandler,
+  verifyToken,
+  verifyAdmin,
+  deletePostPermission,
+  deletePost
+)
 
-module.exports = router;
+module.exports = router

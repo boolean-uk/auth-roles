@@ -1,33 +1,24 @@
-const { PrismaClientKnownRequestError } = require("@prisma/client")
-const { createPostDb } = require('../domains/post.js')
+// DB
+const { createPostDb, deletePostDb } = require('../domains/post.js')
 
 const createPost = async (req, res) => {
-  const {
-    title,
-    userId
-  } = req.body
+  const { title } = req.body
+  const { user } = req
 
-  if (!title || !userId) {
-    return res.status(400).json({
-      error: "Missing fields in request body"
-    })
-  }
+  const createdPost = await createPostDb(title, user.id)
 
-  try {
-    const createdPost = await createPostDb(title, userId)
+  return res.status(201).json({ post: createdPost })
+}
 
-    return res.status(201).json({ post: createdPost })
-  } catch (e) {
-    if (e instanceof PrismaClientKnownRequestError) {
-      if (e.code === "P2025") {
-        return res.status(409).json({ error: "A user with the provided ID does not exist" })
-      }
-    }
+const deletePost = async (req, res) => {
+  const { post } = req
 
-    res.status(500).json({ error: e.message })
-  }
+  const deletedPost = await deletePostDb(post.id)
+
+  res.status(200).json({ post: deletedPost })
 }
 
 module.exports = {
-  createPost
+  createPost,
+  deletePost
 }

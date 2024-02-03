@@ -5,11 +5,10 @@ name: Main Branch CI
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ['main']
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     strategy:
@@ -38,14 +37,14 @@ jobs:
       DATABASE_URL: postgresql://postgres:postgres@localhost:5432/test?schema=prisma
       TEST_DATABASE_URL: postgresql://postgres:postgres@localhost:5432/test?schema=prisma
     steps:
-    - uses: actions/checkout@v4
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v3
-      with:
-        node-version: ${{ matrix.node-version }}
-        cache: 'npm'
-    - run: npm ci
-    - run: npm run test:migration
-    - run: npx jest --bail -i test/api/routes
-      env:
-        JWT_SECRET: hjFh9uF9043f9hfF9hfaq43
+      - uses: actions/checkout@v4
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+      - run: npm ci
+      - run: npm run test:migration
+      - run: npx jest --bail -i test/api/routes
+        env:
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}

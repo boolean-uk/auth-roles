@@ -1,10 +1,25 @@
-const express = require("express");
+const express = require('express')
+const { getAllUsers, createUser, deleteUser } = require('../controllers/user')
+const { verifyToken, verifyAdmin } = require('../middleware/auth')
 const {
-  createUser
-} = require('../controllers/user');
+  createUserErrorHandler,
+  deleteUserErrorHandler
+} = require('../middleware/errorsHandler')
+const { deleteUserPermission } = require('../middleware/permissions')
 
-const router = express.Router();
+const router = express.Router()
 
-router.post("/", createUser);
+router.get('/', verifyToken, verifyAdmin, getAllUsers)
 
-module.exports = router;
+router.post('/', createUserErrorHandler, createUser)
+
+router.delete(
+  '/:userId',
+  deleteUserErrorHandler,
+  verifyToken,
+  verifyAdmin,
+  deleteUserPermission,
+  deleteUser
+)
+
+module.exports = router
