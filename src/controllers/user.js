@@ -1,5 +1,9 @@
 const { PrismaClientKnownRequestError } = require("@prisma/client");
-const { createUserDb, getAllUsersDb } = require("../domains/user.js");
+const {
+  createUserDb,
+  getAllUsersDb,
+  deleteUserByIdDb,
+} = require("../domains/user.js");
 
 const createUser = async (req, res) => {
   const { username, password, role } = req.body;
@@ -27,6 +31,18 @@ const createUser = async (req, res) => {
   }
 };
 
+const deleteUserById = async (req, res) => {
+  const id = Number(req.params.id);
+
+  try {
+    const deletedUser = await deleteUserByIdDb(id);
+
+    return res.status(200).send({ user: deletedUser });
+  } catch (e) {
+    return res.status(e.status ?? 500).send({ error: e.message });
+  }
+};
+
 const getAllUsers = async (req, res) => {
   const allUsers = await getAllUsersDb();
 
@@ -36,4 +52,5 @@ const getAllUsers = async (req, res) => {
 module.exports = {
   createUser,
   getAllUsers,
+  deleteUserById,
 };
