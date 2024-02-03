@@ -3,11 +3,13 @@ const app = require('../../../src/server.js')
 const { createUser } = require('../../helpers/createUser.js')
 const { createPost } = require('../../helpers/createPost.js')
 const jwt = require('jsonwebtoken')
+const { createPermission } = require('../../helpers/createPermision.js')
 
 describe('Post Endpoint', () => {
   describe('POST /posts', () => {
     it('will create a new post', async () => {
       const user = await createUser('john', '123456')
+      await createPermission(['CREATE_POSTS'], user.id)
 
       const request = {
         title: 'Hello, world!',
