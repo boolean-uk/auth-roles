@@ -25,6 +25,20 @@ describe('Post Endpoint', () => {
       expect(response.body.post.userId).toEqual(request.userId)
     })
 
+    it('will return 403 if user do not have permission for create post', async () => {
+      const user = await createUser('john', '123456')
+
+      const request = {
+        title: 'Hello, world!',
+        userId: user.id
+      }
+
+      const response = await supertest(app).post('/posts').send(request)
+
+      expect(response.status).toEqual(403)
+      expect(response.body).toHaveProperty('error')
+    })
+
     it('will return 400 if one of the required fields is missing', async () => {
       const response = await supertest(app).post('/posts').send({})
 
@@ -63,6 +77,21 @@ describe('Post Endpoint', () => {
       expect(response.body.post.title).toEqual('Hello, world!')
     })
 
+    it('will return 403 if admin do not have permission for delete any posts', async () => {
+      const user = await createUser('john', '123456')
+      const admin = await createUser('admin', '123456', 'ADMIN')
+      const post = await createPost('Hello, world!', user.id)
+      const token = jwt.sign({ sub: admin.id }, process.env.JWT_SECRET)
+
+      const response = await supertest(app)
+        .delete(`/posts/${post.id}`)
+        .auth(token, { type: 'bearer' })
+        .send()
+
+      expect(response.status).toEqual(403)
+      expect(response.body).toHaveProperty('error')
+    })
+
     it('should let a user delete their own posts', async () => {
       const user = await createUser('john', '123456')
       await createPermission(['DELETE_MY_POST'], user.id)
@@ -77,6 +106,20 @@ describe('Post Endpoint', () => {
       expect(response.status).toEqual(200)
       expect(response.body.post).not.toEqual(undefined)
       expect(response.body.post.title).toEqual('Hello, world!')
+    })
+
+    it('will return 403 if user do not have permission for delete own posts', async () => {
+      const user = await createUser('john', '123456')
+      const post = await createPost('Hello, world!', user.id)
+      const token = jwt.sign({ sub: user.id }, process.env.JWT_SECRET)
+
+      const response = await supertest(app)
+        .delete(`/posts/${post.id}`)
+        .auth(token, { type: 'bearer' })
+        .send()
+
+      expect(response.status).toEqual(403)
+      expect(response.body).toHaveProperty('error')
     })
 
     it('should return a 403 status code when a user tries to delete another users post', async () => {
