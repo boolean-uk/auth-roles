@@ -49,6 +49,7 @@ describe('Post Endpoint', () => {
     it('should let admins delete any post', async () => {
       const user = await createUser('john', '123456')
       const admin = await createUser('admin', '123456', 'ADMIN')
+      await createPermission(['DELETE_ANY_POST'], admin.id)
       const post = await createPost('Hello, world!', user.id)
       const token = jwt.sign({ sub: admin.id }, process.env.JWT_SECRET)
 
@@ -64,6 +65,7 @@ describe('Post Endpoint', () => {
 
     it('should let a user delete their own posts', async () => {
       const user = await createUser('john', '123456')
+      await createPermission(['DELETE_MY_POST'], user.id)
       const post = await createPost('Hello, world!', user.id)
       const token = jwt.sign({ sub: user.id }, process.env.JWT_SECRET)
 
