@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken");
-const { findUserByUsernameDb } = require("../domains/user");
+const { findUserByIdDb } = require("../domains/user");
 const secret = process.env.JWT_SECRET;
 
 const verifyToken = async (req, res, next) => {
@@ -13,17 +13,23 @@ const verifyToken = async (req, res, next) => {
 
   try {
     const verifiedToken = jwt.verify(token, secret);
+
+    const foundUser = await findUserByIdDb(verifiedToken.sub);
+
+    if (!foundUser) {
+      return res
+        .status(404)
+        .send({ error: "No user found with username or password" });
+    }
+
+    delete foundUser.passwordHash;
+
+    req.user = foundUser;
+
+    next();
   } catch (e) {
     return res.status(400).send({ error: "Invalid credentials" });
   }
-
-  const foundUser = await findUserByUsernameDb(verifiedToken.username);
-
-  delete foundUser.passwordHash;
-
-  req.user = foundUser;
-
-  next();
 };
 
 const verifyAdminRole = (req, res, next) => {
@@ -31,7 +37,17 @@ const verifyAdminRole = (req, res, next) => {
     return res.status(401).send({ error: "Unauthorized" });
   }
 
-  if (req.user.role !== "Admin") {
+  if (req.user.role !== "ADMIN") {
+    return res.status(403).send({ error: "Forbidden" });
+  }
+
+  next();
+};
+
+const verifyUserPermissons = async (req, res, next) => {
+  const userId = Number(req.params.id);
+
+  if (req.user.role !== "ADMIN" && req.user.id !== userId) {
     return res.status(403).send({ error: "Forbidden" });
   }
 
@@ -41,4 +57,5 @@ const verifyAdminRole = (req, res, next) => {
 module.exports = {
   verifyToken,
   verifyAdminRole,
+  verifyUserPermissons,
 };
