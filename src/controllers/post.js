@@ -1,9 +1,5 @@
 // DB
 const { createPostDb, deletePostDb } = require('../domains/post.js')
-const { getUserBySubDb } = require('../domains/user.js')
-
-// Helpers
-const { getPostById } = require('../helpers/postHelpers.js')
 
 const createPost = async (req, res) => {
   const { title } = req.body
@@ -15,11 +11,9 @@ const createPost = async (req, res) => {
 }
 
 const deletePost = async (req, res) => {
-  const { postId } = req.params
+  const { post } = req
 
-  const foundPost = await getPostById(postId)
-
-  const deletedPost = await deletePostDb(foundPost.id)
+  const deletedPost = await deletePostDb(post.id)
 
   res.status(200).json({ post: deletedPost })
 }

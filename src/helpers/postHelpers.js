@@ -8,7 +8,7 @@ const getPostById = async (postId) => {
   const foundPost = await getPostByIdDb(postId)
 
   if (!foundPost) {
-    throw errorCreator('Post with provided if does not exist', 404)
+    throw errorCreator('Post with provided if does not exist', 409)
   }
 
   return foundPost

@@ -84,8 +84,8 @@ describe('User Endpoint', () => {
 
   describe('DELETE /users', () => {
     it('should let admins delete a user', async () => {
-      const admin = await createUser('admin', '123456', 'ADMIN') // create an admin user
-      await createPermission(['DELETE_ANY_USER'], admin.id)
+      const admin = await createUser('admin', '123456', 'ADMIN')
+      await createPermission(['DELETE_ANY_USER'], admin.id, 'ADMIN')
       const token = jwt.sign({ sub: admin.id }, process.env.JWT_SECRET)
 
       const user = await createUser('john', '123456')
@@ -117,7 +117,7 @@ describe('User Endpoint', () => {
     })
 
     it('should return a 403 status code when a non-admin tries to delete another user', async () => {
-      const user = await createUser('mattbellamy', '123456') // create a standard user
+      const user = await createUser('mattbellamy', '123456')
       const token = jwt.sign({ sub: user.id }, process.env.JWT_SECRET)
 
       const userToDelete = await createUser('john', '123456')
@@ -132,7 +132,8 @@ describe('User Endpoint', () => {
     })
 
     it('should let users delete themselves', async () => {
-      const user = await createUser('john', '123456')
+      const user = await createUser('Nazar', '123456')
+      console.log(`User id test: ${user.id}`)
       await createPermission(['DELETE_MY_USER'], user.id)
       const token = jwt.sign({ sub: user.id }, process.env.JWT_SECRET)
 

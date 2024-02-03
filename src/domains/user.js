@@ -21,6 +21,8 @@ const getUserBySubDb = async (sub) => {
     }
   })
 
+  console.log(foundUser)
+
   return foundUser
 }
 

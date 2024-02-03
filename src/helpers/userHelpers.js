@@ -10,7 +10,7 @@ const errorCreator = require('../errors/errorCreator')
 
 const verifyUser = async (token) => {
   const authUser = jwt.verify(token.split(' ')[1], secret)
-  const foundUser = await getUserBySubDb(authUser.sub)
+  const foundUser = await getUserById(authUser.sub)
 
   return foundUser
 }

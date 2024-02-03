@@ -63,7 +63,7 @@ describe('Post Endpoint', () => {
     it('should let admins delete any post', async () => {
       const user = await createUser('john', '123456')
       const admin = await createUser('admin', '123456', 'ADMIN')
-      await createPermission(['DELETE_ANY_POST'], admin.id)
+      await createPermission(['DELETE_ANY_POST'], admin.id, 'ADMIN')
       const post = await createPost('Hello, world!', user.id)
       const token = jwt.sign({ sub: admin.id }, process.env.JWT_SECRET)
 

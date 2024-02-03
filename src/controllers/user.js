@@ -20,14 +20,6 @@ const getAllUsers = async (req, res) => {
 const createUser = async (req, res) => {
   const { username, password } = req.body
 
-  if (!username || !password) {
-    return res.status(400).json({
-      error: 'Missing fields in request body'
-    })
-  }
-
-  await checkUserNameExist(username)
-
   const createdUser = await createUserDb(username, password)
 
   return res.status(201).json({ user: createdUser })
@@ -36,9 +28,7 @@ const createUser = async (req, res) => {
 const deleteUser = async (req, res) => {
   const { userId } = req.params
 
-  const foundUser = await getUserById(userId)
-
-  const deletedUser = await deleteUserDb(foundUser.id)
+  const deletedUser = await deleteUserDb(userId)
 
   res.status(200).json({ user: deletedUser })
 }

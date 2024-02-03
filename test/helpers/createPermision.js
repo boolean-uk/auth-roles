@@ -1,18 +1,14 @@
 const prisma = require('../../src/utils/prisma')
 
-const createPermission = async (permissions, userId) => {
-  await permissions.forEach(async (permission) => {
-    await prisma.permission.create({
-      data: {
-        role: 'USER',
-        permission,
-        user: {
-          connect: {
-            id: Number(userId)
-          }
-        }
-      }
-    })
+const createPermission = async (permissions, userId, role = 'USER') => {
+  const data = permissions.map((permission) => ({
+    role,
+    permission,
+    userId: Number(userId)
+  }))
+
+  await prisma.permission.createMany({
+    data: [...data]
   })
 }
 
