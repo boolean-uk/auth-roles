@@ -1,6 +1,8 @@
 const jwt = require("jsonwebtoken");
-const { findUserByIdDb } = require("../domains/user");
 const secret = process.env.JWT_SECRET;
+
+const { findUserByIdDb } = require("../domains/user");
+const { findPostByIdDb } = require("../domains/post");
 
 const verifyToken = async (req, res, next) => {
   const header = req.header("authorization");
@@ -54,8 +56,25 @@ const verifyUserPermissons = async (req, res, next) => {
   next();
 };
 
+const verifyPostPermissons = async (req, res, next) => {
+  const postId = Number(req.params.id);
+
+  const postToDelete = await findPostByIdDb(postId);
+
+  if (!postToDelete) {
+    return res.status(404).send({ error: "No post found with provided ID" });
+  }
+
+  if (req.user.role !== "ADMIN" && req.user.id !== postToDelete.userId) {
+    return res.status(403).send({ error: "Forbidden" });
+  }
+
+  next();
+};
+
 module.exports = {
   verifyToken,
   verifyAdminRole,
   verifyUserPermissons,
+  verifyPostPermissons,
 };
