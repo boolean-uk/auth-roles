@@ -1,6 +1,7 @@
 const jwt = require("jsonwebtoken");
 const secret = process.env.JWT_SECRET;
 
+const errors = require("../errors/errors");
 const { findUserByIdDb } = require("../domains/user");
 const { findPostByIdDb } = require("../domains/post");
 
@@ -36,11 +37,11 @@ const verifyToken = async (req, res, next) => {
 
 const verifyAdminRole = (req, res, next) => {
   if (!req.user) {
-    return res.status(401).send({ error: "Unauthorized" });
+    return res.status(401).send({ error: errors.unauthorized });
   }
 
   if (req.user.role !== "ADMIN") {
-    return res.status(403).send({ error: "Forbidden" });
+    return res.status(403).send({ error: errors.forbidden });
   }
 
   next();
@@ -50,7 +51,7 @@ const verifyUserPermissons = async (req, res, next) => {
   const userId = Number(req.params.id);
 
   if (req.user.role !== "ADMIN" && req.user.id !== userId) {
-    return res.status(403).send({ error: "Forbidden" });
+    return res.status(403).send({ error: errors.forbidden });
   }
 
   next();
@@ -66,7 +67,7 @@ const verifyPostPermissons = async (req, res, next) => {
   }
 
   if (req.user.role !== "ADMIN" && req.user.id !== postToDelete.userId) {
-    return res.status(403).send({ error: "Forbidden" });
+    return res.status(403).send({ error: errors.forbidden });
   }
 
   next();

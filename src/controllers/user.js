@@ -1,4 +1,5 @@
 const { PrismaClientKnownRequestError } = require("@prisma/client");
+const errors = require("../errors/errors.js");
 const {
   createUserDb,
   getAllUsersDb,
@@ -10,7 +11,7 @@ const createUser = async (req, res) => {
 
   if (!username || !password) {
     return res.status(400).send({
-      error: "Missing fields in request body",
+      error: errors.missingFields,
     });
   }
 

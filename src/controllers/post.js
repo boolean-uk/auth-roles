@@ -1,12 +1,13 @@
 const { PrismaClientKnownRequestError } = require("@prisma/client");
 const { createPostDb, deletePostByIdDb } = require("../domains/post.js");
+const errors = require("../errors/errors.js");
 
 const createPost = async (req, res) => {
   const { title, userId } = req.body;
 
   if (!title || !userId) {
     return res.status(400).json({
-      error: "Missing fields in request body",
+      error: errors.missingFields,
     });
   }
 
