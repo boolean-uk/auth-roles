@@ -5,26 +5,11 @@ const { getUserBySubDb } = require('../domains/user.js')
 // Helpers
 const { getPostById } = require('../helpers/postHelpers.js')
 
-// Error handlers
-const { checkPostTitleExist } = require('../errors/postErrorHandler.js')
-const errorCreator = require('../errors/errorCreator.js')
-
 const createPost = async (req, res) => {
-  const { title, userId } = req.body
+  const { title } = req.body
+  const { user } = req
 
-  if (!title || !userId) {
-    throw errorCreator('Missing fields in request body', 400)
-  }
-
-  const foundUser = await getUserBySubDb(userId)
-
-  if (!foundUser) {
-    throw errorCreator('The user with provided userId does not exist', 409)
-  }
-
-  await checkPostTitleExist(title)
-
-  const createdPost = await createPostDb(title, foundUser.id)
+  const createdPost = await createPostDb(title, user.id)
 
   return res.status(201).json({ post: createdPost })
 }

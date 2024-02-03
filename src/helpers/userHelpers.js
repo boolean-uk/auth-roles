@@ -19,10 +19,19 @@ const getUserById = async (userId) => {
   const foundUser = await getUserBySubDb(userId)
 
   if (!foundUser) {
-    throw errorCreator('User with provided id does not exist', 404)
+    throw errorCreator('User with provided id does not exist', 409)
   }
 
-  return foundUser
+  const { id, username, role, permissions } = foundUser
+
+  const userPermissions = permissions.map((permission) => permission.permission)
+
+  return {
+    id,
+    username,
+    role,
+    permissions: userPermissions
+  }
 }
 
 module.exports = { verifyUser, getUserById }

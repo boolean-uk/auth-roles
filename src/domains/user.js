@@ -11,6 +11,13 @@ const getUserBySubDb = async (sub) => {
   const foundUser = await prisma.user.findFirst({
     where: {
       id: Number(sub)
+    },
+    include: {
+      permissions: {
+        select: {
+          permission: true
+        }
+      }
     }
   })
 
