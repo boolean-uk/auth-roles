@@ -101,6 +101,21 @@ describe('User Endpoint', () => {
       expect(response.body.user.username).toEqual(user.username)
     })
 
+    it('will return 403 if admin do not have permission for delete any users', async () => {
+      const admin = await createUser('admin', '123456', 'ADMIN')
+      const token = jwt.sign({ sub: admin.id }, process.env.JWT_SECRET)
+
+      const user = await createUser('john', '123456')
+
+      const response = await supertest(app)
+        .delete(`/users/${user.id}`)
+        .auth(token, { type: 'bearer' })
+        .send()
+
+      expect(response.status).toEqual(403)
+      expect(response.body).toHaveProperty('error')
+    })
+
     it('should return a 403 status code when a non-admin tries to delete another user', async () => {
       const user = await createUser('mattbellamy', '123456') // create a standard user
       const token = jwt.sign({ sub: user.id }, process.env.JWT_SECRET)
@@ -130,6 +145,19 @@ describe('User Endpoint', () => {
       expect(response.body.user).not.toEqual(undefined)
       expect(response.body.user.id).toEqual(user.id)
       expect(response.body.user.username).toEqual(user.username)
+    })
+
+    it('will return 403 if users do not have permission for delete themselves', async () => {
+      const user = await createUser('john', '123456')
+      const token = jwt.sign({ sub: user.id }, process.env.JWT_SECRET)
+
+      const response = await supertest(app)
+        .delete(`/users/${user.id}`)
+        .auth(token, { type: 'bearer' })
+        .send()
+
+      expect(response.status).toEqual(403)
+      expect(response.body).toHaveProperty('error')
     })
   })
 })
