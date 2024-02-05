@@ -9,6 +9,7 @@ const verifyToken = async (req, res, next)=>{
     }
     const [_, token ]= headerAuth.split(' ');
 
+    
     try{
       const verifiedToken = jwt.verify(token, secret)  
 
@@ -21,10 +22,10 @@ const verifyToken = async (req, res, next)=>{
       console.log(verifyAccess.role)
 
       if(verifyAccess.role !== 'ADMIN' ){
-        res.status(403).json({message: "You're cant have access to the users"})
+       return res.status(403).json({message: "You're not allowed"})
       }
     }catch(err){
-        return res.status(400).json({'This is the err': err})
+        return res.status(400).json({'This is the err': err.message})
 
     }
     next()

@@ -88,6 +88,12 @@ const getAllUser = async (req, res)=>{
 
 const deleteUser = async (req, res) => {
   const deletedUserId = Number(req.params.id);
+  
+  await prisma.post.deleteMany({
+    where: {
+      userId: deletedUserId,
+    },
+  });
 
   try {
     const deletedUser = await prisma.user.delete({
@@ -101,9 +107,6 @@ const deleteUser = async (req, res) => {
     res.status(200).json({ deletedUser });
   } catch (error) {
     return res.status(403).json({ error: 'Internal Server Error',details : error.message });
-
-  /*   console.error("Error deleting user:", error);
-    res.status(403).json({ message: "Unable to delete user" }); */
   }
 };
 
