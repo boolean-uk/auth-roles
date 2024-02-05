@@ -6,6 +6,7 @@ const morgan = require('morgan');
 
 app.disable('x-powered-by');
 
+
 app.use(cors());
 app.use(morgan('dev'));
 app.use(express.json());
@@ -16,5 +17,6 @@ app.use('/users', userRouter);
 
 const postRouter = require('./routers/post');
 app.use('/posts', postRouter);
+
 
 module.exports = app
