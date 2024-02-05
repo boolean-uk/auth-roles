@@ -18,8 +18,12 @@ model User {
   passwordHash  String
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
-
   posts         Post[]
+  role          Role      @default( USER)
+}
+enum Role{
+  USER
+  ADMIN
 }
 
 model Post {
