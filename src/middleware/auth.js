@@ -4,6 +4,8 @@ const prisma = require('../utils/prisma')
 
 const verifyToken = async (req, res, next)=>{
     const headerAuth = req.headers.authorization
+    const id = Number(req.params.id);
+
     if(!headerAuth){
         res.status(400).json({message:'Token is missing'})
     }
@@ -20,8 +22,11 @@ const verifyToken = async (req, res, next)=>{
       })
 
       console.log(verifyAccess.role)
+      console.log('id is......', verifyAccess.id === id)
+      console.log('data base id', verifyAccess.id)
+      console.log('params id', id )
 
-      if(verifyAccess.role !== 'ADMIN' ){
+      if(verifyAccess.role !== 'ADMIN' && verifyAccess.id !== id){
        return res.status(403).json({message: "You're not allowed"})
       }
     }catch(err){
