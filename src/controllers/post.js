@@ -1,5 +1,6 @@
 const { PrismaClientKnownRequestError } = require("@prisma/client")
 const { createPostDb } = require('../domains/post.js')
+const prisma = require('../utils/prisma.js')
 
 const createPost = async (req, res) => {
   const {
@@ -28,6 +29,39 @@ const createPost = async (req, res) => {
   }
 }
 
+const deletePost = async (req, res) => {
+  const deletePostId = Number(req.params.id);
+
+  try {
+    // Check if the post exists
+    const existingPost = await prisma.post.findUnique({
+      where: {
+        id: deletePostId,
+      },
+    });
+
+    if (!existingPost) {
+      return res.status(404).json({ error: 'Post not found' });
+    }
+
+    // Delete the post
+    const deletedPost = await prisma.post.delete({
+      where: {
+        id: deletePostId,
+      },
+    });
+
+    console.log("This is the post to be deleted:", deletedPost);
+
+    res.status(200).json({ deletedPost });
+  } catch (error) {
+    return res.status(500).json({ error: 'Internal Server Error', details: error.message });
+  }
+};
+
+
+
 module.exports = {
-  createPost
+  createPost,
+  deletePost
 }
