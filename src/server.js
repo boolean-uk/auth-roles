@@ -1,6 +1,6 @@
 const express = require('express');
 const app = express();
-
+const {PrismaClientKnownRequestError} = require("@prisma/client")
 const cors = require('cors');
 const morgan = require('morgan');
 
@@ -16,5 +16,7 @@ app.use('/users', userRouter);
 
 const postRouter = require('./routers/post');
 app.use('/posts', postRouter);
+
+
 
 module.exports = app

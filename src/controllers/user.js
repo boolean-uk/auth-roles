@@ -1,5 +1,5 @@
 const { PrismaClientKnownRequestError } = require("@prisma/client")
-const { createUserDb } = require('../domains/user.js')
+const { createUserDb, getUsersDB, deleteUserDB, findUserDB } = require('../domains/user.js')
 
 const createUser = async (req, res) => {
   const {
@@ -28,6 +28,27 @@ const createUser = async (req, res) => {
   }
 }
 
+
+const getUsers = async (req, res) => {
+  const users = await getUsersDB();
+
+  res.status(200).json({ users });
+};
+
+const deleteUser = async (req, res) => {
+  const id = +req.params.id;
+
+  if (req.user.role !== "ADMIN" && req.user.id !== id) {
+    return res.status(403).json({ error: "Forbiddin" });
+  }
+
+  const deletedUser = await deleteUserDB(id);
+
+  return res.status(200).json({ user: deletedUser });
+};
+
 module.exports = {
-  createUser
+  createUser,
+  getUsers,
+  deleteUser
 }
