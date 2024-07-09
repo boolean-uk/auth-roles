@@ -1,5 +1,5 @@
 const { PrismaClientKnownRequestError } = require("@prisma/client")
-const { createPostDb } = require('../domains/post.js')
+const { createPostDb, deletePostDb } = require('../domains/post.js')
 
 const createPost = async (req, res) => {
   const {
@@ -28,6 +28,31 @@ const createPost = async (req, res) => {
   }
 }
 
+const deletePost = async (req, res) => {
+  const postId = Number(req.params.id)
+  let userId = Number(req.user.id)
+
+  if(req.user.role.name === 'ADMIN') {
+    userId = {}
+  }
+
+  try {
+
+    const deletedPost = await deletePostDb(postId, userId)
+
+    return res.json({ post: deletedPost })
+  } catch (e) {
+    if (e instanceof PrismaClientKnownRequestError) {
+      if (e.code === "P2025") {
+        return res.status(403).json({ error: "User must be owner of the post" })
+      }
+    }
+
+    res.status(500).json({ error: e.message })
+  }
+}
+
 module.exports = {
-  createPost
+  createPost,
+  deletePost
 }
