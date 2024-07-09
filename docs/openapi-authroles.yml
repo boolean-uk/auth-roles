@@ -1,0 +1,182 @@
+openapi: 3.0.0
+info:
+  title: auth-roles API
+  description: a pracitce api for user login and role-based access
+  version: 0.0.1
+servers: 
+  - url: http://localhost:4000 
+    description: sandbox
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+paths:
+  /users:
+    get:
+      summary: retrieve all users
+      description: only do so if the user attempting to view this list has admin access
+      security: 
+        - BearerAuth: [admin]
+      responses: 
+        200:    
+          description: an array of users
+          content:         
+            application/json:
+                schema:
+                  type: object
+                  properties:
+                    users: 
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          id:
+                            type: integer
+                          username:
+                            type: string
+        403:  
+          description: error (forbidden)
+          content: 
+            application/json:
+                schema:
+                  type: object
+                  properties:
+                    error: 
+                      type: string
+    post:
+      summary: create a new user
+      requestBody:
+        required: true
+        content:         
+          application/json:
+              schema:
+                type: object
+                properties:
+                  username:
+                    type: string
+                  password:
+                    type: string
+      responses: 
+        201:
+          description: the newly created user
+          content: 
+            application/json:
+                schema:
+                  type: object
+                  properties:
+                    id: 
+                      type: integer
+                    username:
+                      type: string
+        400: 
+          description: error (missing input)
+          content: 
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error: 
+                    type: string
+        409: 
+          description: error (invalid username)
+          content: 
+            application/json:
+                schema:
+                  type: object
+                  properties:
+                    error: 
+                      type: string
+    delete:
+      summary: delete a user
+      description: let the user themselves and any admin delete a user
+      security: 
+        - BearerAuth: [admin]      
+      responses:
+        201:
+          description: the deleted user
+          content: 
+            application/json:
+                schema:
+                  type: object
+                  properties:
+                      id: 
+                        type: integer
+        403:
+          description: error (forbidden)
+          content: 
+            application/json:
+                schema:
+                  type: object
+                  properties:
+                    error: 
+                      type: string
+  /posts:
+    post:
+      summary: create a post
+      description: let all users create posts
+      requestBody:
+        required: true
+        content:         
+          application/json:
+              schema:
+                type: object
+                properties:
+                  title:
+                    type: string
+      responses:
+        201:
+          description: the newly created post
+          content: 
+            application/json:
+                schema:
+                  type: object
+                  properties:
+                    id: 
+                      type: integer                 
+                    title:
+                      type: string
+        400: 
+          description: error (missing input)
+          content: 
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error: 
+                    type: string
+        409:
+          description: error (invalid user)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error: 
+                    type: string
+    delete:
+      summary: delete a post
+      description: let the owner of the post and any admin delete a post
+      security: 
+        - BearerAuth: [admin]      
+      responses:
+        201:
+          description: the deleted post
+          content: 
+            application/json:
+                schema:
+                  type: object
+                  properties:
+                    id: 
+                      type: integer
+                    title:
+                      type: string
+        403:
+          description: error (forbidden)
+          content: 
+            application/json:
+                schema:
+                  type: object
+                  properties:
+                    error: 
+                      type: string
