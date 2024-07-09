@@ -1,10 +1,15 @@
-const express = require("express");
-const {
-  createUser
-} = require('../controllers/user');
+const express = require('express')
+require('express-async-errors')
+const { createUser, getUsers, deleteUser } = require('../controllers/user')
 
-const router = express.Router();
+const { hasValidToken, checkRole } = require('../verification/verification.js')
 
-router.post("/", createUser);
+const router = express.Router()
 
-module.exports = router;
+router.post('/', createUser)
+
+router.get('/', hasValidToken, checkRole, getUsers)
+
+router.delete('/:id', hasValidToken, checkRole, deleteUser)
+
+module.exports = router

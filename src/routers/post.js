@@ -1,10 +1,12 @@
-const express = require("express");
-const {
-  createPost
-} = require('../controllers/post');
+const express = require('express')
+require('express-async-errors')
+const { hasValidToken, checkRole } = require('../verification/verification.js')
+const { createPost, deletePost } = require('../controllers/post')
 
-const router = express.Router();
+const router = express.Router()
 
-router.post("/", createPost);
+router.post('/', createPost)
 
-module.exports = router;
+router.delete('/:id', hasValidToken, checkRole, deletePost)
+
+module.exports = router
