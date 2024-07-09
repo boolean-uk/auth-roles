@@ -52,7 +52,7 @@ describe("User Endpoint", () => {
             const token = jwt.sign({ sub: admin.id }, process.env.JWT_SECRET)
 
             let i = 5
-            while (i --> 0) {
+            while (i-- > 0) {
                 await createUser(`user${i}`, '123456')
             }
 

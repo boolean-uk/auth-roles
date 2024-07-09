@@ -1,5 +1,5 @@
 const { PrismaClientKnownRequestError } = require("@prisma/client")
-const { createPostDb } = require('../domains/post.js')
+const { createPostDb, deletePostDb } = require('../domains/post.js')
 
 const createPost = async (req, res) => {
   const {
@@ -28,6 +28,13 @@ const createPost = async (req, res) => {
   }
 }
 
+async function deletePost(req, res) {
+  const postId = Number(req.params.id)
+  const post = await deletePostDb(postId)
+  res.status(200).json({ post })
+}
+
 module.exports = {
-  createPost
+  createPost,
+  deletePost
 }
