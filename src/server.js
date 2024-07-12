@@ -17,4 +17,15 @@ app.use('/users', userRouter);
 const postRouter = require('./routers/post');
 app.use('/posts', postRouter);
 
+app.use('*', (req, res) => {
+  res.status(404).json({
+    message : 'Resource not found'
+  })
+})
+
+app.use((error, req, res, next) => {
+  res.status(500).json({
+    message : 'Somthing went wrong!'
+  })
+})
 module.exports = app

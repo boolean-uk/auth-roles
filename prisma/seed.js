@@ -7,14 +7,15 @@ async function seed() {
   const users = []
 
   while (users.length < 10) {
-    const user = await createUser(faker.internet.userName(), '123456789')
+    const role = genereateRandomUserOrAdmin()
+    const user = await createUser(faker.internet.userName(), '123456789', role)
     users.push(user)
   }
 
   process.exit(0)
 }
 
-async function createUser(username, password) {
+async function createUser(username, password, role) {
   const posts = []
 
   for (let i = 0; i < username.length; i++) {
@@ -24,7 +25,7 @@ async function createUser(username, password) {
   const user = await prisma.user.create({
     data: {
       username,
-      passwordHash: await bcrypt.hash(password, 6),
+      passwordHash: await bcrypt.hash(password, 6), role,
       posts: {
         create: posts
       }
@@ -45,3 +46,9 @@ seed()
     await prisma.$disconnect();
   })
   .finally(() => process.exit(1));
+
+
+  function genereateRandomUserOrAdmin() {
+    const role = ['ADMIN', 'USER']
+    return role[Math.floor(Math.random() * role.length)]
+  }
